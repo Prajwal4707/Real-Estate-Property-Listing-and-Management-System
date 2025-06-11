@@ -11,12 +11,12 @@ const seedProperties = async () => {
     console.log("Inserting sample properties...");
     const properties = [
       {
-        title: "Luxury Apartment in New York",
-        location: "New York, USA",
-        price: 750000,
+        title: "Premium Apartment in Bandra",
+        location: "Mumbai, Maharashtra",
+        price: 85000000, // 8.5 Crores
         image: [
-          "https://ik.imagekit.io/ddtl85xea/property1.jpg",
-          "https://ik.imagekit.io/ddtl85xea/property2.jpg",
+          "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?ixlib=rb-4.0.3",
+          "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3",
         ],
         beds: 3,
         baths: 2,
@@ -24,53 +24,59 @@ const seedProperties = async () => {
         type: "Apartment",
         availability: "Available",
         description:
-          "A stunning luxury apartment with city views, modern design, and premium amenities.",
-        amenities: ["Pool", "Gym", "Parking", "Elevator"],
-        phone: "+1-555-123-4567",
+          "A stunning luxury apartment in Bandra with sea view, modern design, and premium amenities.",
+        amenities: ["Pool", "Gym", "Parking", "Elevator", "24/7 Security"],
+        phone: "+91-982-555-1234",
       },
       {
-        title: "Cozy Beach House",
-        location: "Miami, USA",
-        price: 850000,
+        title: "Mountain View Villa in Shimla",
+        location: "Shimla, Himachal Pradesh",
+        price: 45000000, // 4.5 Crores
         image: [
-          "https://ik.imagekit.io/ddtl85xea/property3.jpg",
-          "https://ik.imagekit.io/ddtl85xea/property4.jpg",
+          "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-4.0.3",
+          "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-4.0.3",
         ],
         beds: 4,
         baths: 3,
-        sqft: 2000,
-        type: "House",
+        sqft: 3500,
+        type: "Villa",
         availability: "Available",
         description:
-          "A cozy beach house with private access to the beach, perfect for family getaways.",
-        amenities: ["Beach Access", "Deck", "Outdoor Shower", "Grill"],
-        phone: "+1-555-987-6543",
+          "A beautiful mountain villa with panoramic Himalayan views, perfect for luxury living.",
+        amenities: [
+          "Mountain View",
+          "Fireplace",
+          "Heated Flooring",
+          "Modern Kitchen",
+          "Private Garden",
+        ],
+        phone: "+91-981-555-6543",
       },
       {
-        title: "Modern Condo",
-        location: "San Francisco, USA",
-        price: 950000,
+        title: "Luxury Apartment in South Delhi",
+        location: "New Delhi, India",
+        price: 95000000, // 9.5 Crores
         image: [
-          "https://ik.imagekit.io/ddtl85xea/property5.jpg",
-          "https://ik.imagekit.io/ddtl85xea/property6.jpg",
+          "https://images.unsplash.com/photo-1600585154526-990dced4db0d?ixlib=rb-4.0.3",
+          "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?ixlib=rb-4.0.3",
         ],
-        beds: 2,
-        baths: 2,
-        sqft: 1200,
-        type: "Condo",
+        beds: 4,
+        baths: 4,
+        sqft: 2800,
+        type: "Apartment",
         availability: "Available",
         description:
-          "A modern condo located in the heart of the city with stunning skyline views.",
-        amenities: ["Rooftop", "Doorman", "Parking", "Gym"],
-        phone: "+1-555-246-8101",
+          "An elegant apartment in the heart of South Delhi with premium finishes and modern amenities.",
+        amenities: ["Club House", "Doorman", "Parking", "Gym", "Swimming Pool"],
+        phone: "+91-981-555-8101",
       },
       {
         title: "Luxury Villa in Jubilee Hills",
         location: "Hyderabad, India",
-        price: 45000000,
+        price: 45000000, // 4.5 Crores
         image: [
-          "https://ik.imagekit.io/ddtl85xea/property7.jpg",
-          "https://ik.imagekit.io/ddtl85xea/property8.jpg",
+          "https://images.unsplash.com/photo-1613977257363-707ba9348227?ixlib=rb-4.0.3",
+          "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3",
         ],
         beds: 5,
         baths: 6,
@@ -92,10 +98,10 @@ const seedProperties = async () => {
       {
         title: "Sea-facing Apartment in Worli",
         location: "Mumbai, India",
-        price: 120000000,
+        price: 120000000, // 12 Crores
         image: [
-          "https://ik.imagekit.io/ddtl85xea/property9.jpg",
-          "https://ik.imagekit.io/ddtl85xea/property10.jpg",
+          "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?ixlib=rb-4.0.3",
+          "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3",
         ],
         beds: 4,
         baths: 4,
@@ -117,10 +123,10 @@ const seedProperties = async () => {
       {
         title: "Contemporary Home in DLF Phase 1",
         location: "Gurgaon, India",
-        price: 35000000,
+        price: 35000000, // 3.5 Crores
         image: [
-          "https://ik.imagekit.io/ddtl85xea/property11.jpg",
-          "https://ik.imagekit.io/ddtl85xea/property12.jpg",
+          "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3",
+          "https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?ixlib=rb-4.0.3",
         ],
         beds: 4,
         baths: 4,
@@ -141,10 +147,10 @@ const seedProperties = async () => {
       {
         title: "Premium Flat in Indiranagar",
         location: "Bangalore, India",
-        price: 25000000,
+        price: 9500000, // 95 Lakhs
         image: [
-          "https://ik.imagekit.io/ddtl85xea/property13.jpg",
-          "https://ik.imagekit.io/ddtl85xea/property14.jpg",
+          "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?ixlib=rb-4.0.3",
+          "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?ixlib=rb-4.0.3",
         ],
         beds: 3,
         baths: 3,
@@ -161,6 +167,80 @@ const seedProperties = async () => {
           "24/7 Security",
         ],
         phone: "+91-963-000-0004",
+      },
+      {
+        title: "Luxury Penthouse in Whitefield",
+        location: "Bangalore, India",
+        price: 35000000, // 3.5 Crores
+        image: [
+          "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?ixlib=rb-4.0.3",
+          "https://images.unsplash.com/photo-1554995207-c18c203602cb?ixlib=rb-4.0.3",
+        ],
+        beds: 4,
+        baths: 5,
+        sqft: 3500,
+        type: "Penthouse",
+        availability: "Available",
+        description:
+          "Opulent penthouse in the upscale Whitefield area with private terrace, plunge pool, and luxurious interiors.",
+        amenities: [
+          "Private Pool",
+          "Terrace",
+          "Home Automation",
+          "Modular Kitchen",
+          "Servant Quarter",
+          "24/7 Security",
+        ],
+        phone: "+91-900-000-0005",
+      },
+      {
+        title: "Garden Villa in Koramangala",
+        location: "Bangalore, India",
+        price: 42000000, // 4.2 Crores
+        image: [
+          "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3",
+          "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?ixlib=rb-4.0.3",
+        ],
+        beds: 5,
+        baths: 6,
+        sqft: 5000,
+        type: "Villa",
+        availability: "Available",
+        description:
+          "Luxurious villa with a sprawling garden, located in the prime area of Koramangala, featuring modern architecture and high-end finishes.",
+        amenities: [
+          "Garden",
+          "Swimming Pool",
+          "Gym",
+          "Modular Kitchen",
+          "Servant Quarter",
+          "24/7 Security",
+        ],
+        phone: "+91-900-000-0006",
+      },
+      {
+        title: "Premium Apartment in HSR Layout",
+        location: "Bangalore, India",
+        price: 8500000, // 85 Lakhs
+        image: [
+          "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3",
+          "https://images.unsplash.com/photo-1565182999561-18d7dc61c393?ixlib=rb-4.0.3",
+        ],
+        beds: 3,
+        baths: 3,
+        sqft: 2000,
+        type: "Apartment",
+        availability: "Available",
+        description:
+          "Spacious and modern apartment in HSR Layout, with easy access to major tech parks, schools, and hospitals.",
+        amenities: [
+          "Gym",
+          "Swimming Pool",
+          "Children's Play Area",
+          "Club House",
+          "24/7 Security",
+        ],
+        phone: "+91-900-000-0007",
       },
     ];
 

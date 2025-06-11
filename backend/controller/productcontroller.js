@@ -252,6 +252,11 @@ const singleproperty = async (req, res) => {
         .status(404)
         .json({ message: "Property not found", success: false });
     }
+
+    // Increment the views count
+    property.views = (property.views || 0) + 1;
+    await property.save();
+
     res.json({ property, success: true });
   } catch (error) {
     console.log("Error fetching property:", error);

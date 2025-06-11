@@ -167,8 +167,9 @@ const PropertyCard = ({ property, viewType }) => {
               {property.location}
             </div>
             <div className="flex items-center gap-1 text-gray-500 text-sm">
+              {" "}
               <Eye className="w-4 h-4" />
-              <span>{Math.floor(Math.random() * 100) + 20}</span>
+              <span>{property.views || 0}</span>
             </div>
           </div>
 
