@@ -17,6 +17,9 @@ import NotFoundPage from "./components/Notfound";
 import { AuthProvider } from "./context/AuthContext";
 import AIPropertyHub from "./pages/Aiagent";
 import StructuredData from "./components/SEO/StructuredData";
+import MyBookings from "./components/dashboard/Appointments";
+import Dashboard from "./components/dashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
 import "react-toastify/dist/ReactToastify.css";
 
 export const Backendurl = import.meta.env.VITE_API_BASE_URL;
@@ -43,8 +46,24 @@ const App = () => {
               element={<PropertyDetails />}
             />
             <Route path="/about" element={<Aboutus />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/contact" element={<Contact />} />{" "}
             <Route path="/ai-property-hub" element={<AIPropertyHub />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my-bookings"
+              element={
+                <ProtectedRoute>
+                  <MyBookings />
+                </ProtectedRoute>
+              }
+            />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
           <Footer />

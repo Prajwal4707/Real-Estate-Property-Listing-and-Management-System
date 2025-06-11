@@ -58,7 +58,7 @@ function Step({ icon: Icon, title, description, stepNumber }) {
 
 export default function HowItWorks() {
   return (
-    <section className="py-28 bg-gradient-to-b from-white to-gray-50 overflow-hidden">
+    <section className="py-2 bg-gradient-to-b from-white to-gray-50 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div 
@@ -151,7 +151,7 @@ export default function HowItWorks() {
           transition={{ delay: 0.8 }}
           className="mt-20 max-w-3xl mx-auto"
         >
-          <div className="bg-white p-8 rounded-xl shadow-xl border border-gray-50 text-center">
+          {/* <div className="bg-white p-8 rounded-xl shadow-xl border border-gray-50 text-center">
             <p className="text-gray-700 italic text-lg mb-4">
               {`"The 3-step process was incredibly smooth. Within a week, I found and secured my dream apartment!"`}
             </p>
@@ -163,7 +163,7 @@ export default function HowItWorks() {
                 </svg>
               ))}
             </div>
-          </div>
+          </div> */}
         </motion.div>
       </div>
     </section>

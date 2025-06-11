@@ -54,7 +54,7 @@ export const getSchedulingEmailTemplate = (appointment, date, time, notes) => `
           <br>
           📧 <a href="mailto:support@buildestate.com" style="color: #2563eb; text-decoration: none;">support@buildestate.com</a>
           <br>
-          📞 <a href="tel:+1234567890" style="color: #2563eb; text-decoration: none;">+1 (234) 567-890</a>
+          📞 <a href="tel:+919876543210" style="color: #2563eb; text-decoration: none;">+91 9876543210</a>
         </p>
       </div>
     </div>

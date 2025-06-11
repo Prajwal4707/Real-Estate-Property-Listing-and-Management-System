@@ -13,10 +13,10 @@ const propertySchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  image: { 
+  image: {
     type: [String],
-    required: true
- },
+    required: true,
+  },
   beds: {
     type: Number,
     required: true,
@@ -42,8 +42,9 @@ const propertySchema = new mongoose.Schema({
     required: true,
   },
   amenities: {
-    type: Array,
+    type: [String],
     required: true,
+    default: [],
   },
   phone: {
     type: String,

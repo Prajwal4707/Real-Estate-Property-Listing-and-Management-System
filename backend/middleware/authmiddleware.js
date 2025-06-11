@@ -4,6 +4,7 @@ import userModel from "../models/Usermodel.js";
 export const protect = async (req, res, next) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
+    console.log("Token received:", token ? "Token exists" : "No token");
 
     if (!token) {
       return res.status(401).json({
@@ -13,7 +14,10 @@ export const protect = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("Decoded token:", decoded);
+
     const user = await userModel.findById(decoded.id).select("-password");
+    console.log("Found user:", user ? "User exists" : "No user found");
 
     if (!user) {
       return res.status(401).json({
@@ -25,7 +29,7 @@ export const protect = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    console.error("Auth error:", error);
+    console.error("Auth error details:", error);
     return res.status(401).json({
       success: false,
       message: "Not authorized",

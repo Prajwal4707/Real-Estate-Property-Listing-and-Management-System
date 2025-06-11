@@ -1,21 +1,22 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { 
-  MapPin, 
-  IndianRupee, 
-  BedDouble, 
-  Bath, 
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import {
+  MapPin,
+  IndianRupee,
+  BedDouble,
+  Bath,
   Maximize,
   Share2,
   ChevronLeft,
   ChevronRight,
-  Eye
-} from 'lucide-react';
-import PropTypes from 'prop-types';
+  Eye,
+  CheckCircle2,
+} from "lucide-react";
+import PropTypes from "prop-types";
 
 const PropertyCard = ({ property, viewType }) => {
-  const isGrid = viewType === 'grid';
+  const isGrid = viewType === "grid";
   const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showControls, setShowControls] = useState(false);
@@ -31,21 +32,21 @@ const PropertyCard = ({ property, viewType }) => {
         await navigator.share({
           title: property.title,
           text: `Check out this property: ${property.title}`,
-          url: window.location.href
+          url: window.location.href,
         });
       } else {
         await navigator.clipboard.writeText(window.location.href);
-        alert('Link copied to clipboard!');
+        alert("Link copied to clipboard!");
       }
     } catch (error) {
-      console.error('Error sharing:', error);
+      console.error("Error sharing:", error);
     }
   };
 
   const handleImageNavigation = (e, direction) => {
     e.stopPropagation();
     const imagesCount = property.image.length;
-    if (direction === 'next') {
+    if (direction === "next") {
       setCurrentImageIndex((prev) => (prev + 1) % imagesCount);
     } else {
       setCurrentImageIndex((prev) => (prev - 1 + imagesCount) % imagesCount);
@@ -61,13 +62,13 @@ const PropertyCard = ({ property, viewType }) => {
       whileHover={{ y: -5 }}
       transition={{ duration: 0.3 }}
       className={`group bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300
-        ${isGrid ? 'flex flex-col' : 'flex flex-row gap-6'}`}
+        ${isGrid ? "flex flex-col" : "flex flex-row gap-6"}`}
       onClick={handleNavigateToDetails}
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >
       {/* Image Carousel Section */}
-      <div className={`relative ${isGrid ? 'h-64' : 'w-96'}`}>
+      <div className={`relative ${isGrid ? "h-64" : "w-96"}`}>
         <AnimatePresence mode="wait">
           <motion.img
             key={currentImageIndex}
@@ -88,7 +89,7 @@ const PropertyCard = ({ property, viewType }) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.8 }}
               whileHover={{ opacity: 1 }}
-              onClick={(e) => handleImageNavigation(e, 'prev')}
+              onClick={(e) => handleImageNavigation(e, "prev")}
               className="p-1 rounded-full bg-white/80 backdrop-blur-sm"
             >
               <ChevronLeft className="w-5 h-5 text-gray-800" />
@@ -97,7 +98,7 @@ const PropertyCard = ({ property, viewType }) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.8 }}
               whileHover={{ opacity: 1 }}
-              onClick={(e) => handleImageNavigation(e, 'next')}
+              onClick={(e) => handleImageNavigation(e, "next")}
               className="p-1 rounded-full bg-white/80 backdrop-blur-sm"
             >
               <ChevronRight className="w-5 h-5 text-gray-800" />
@@ -112,7 +113,9 @@ const PropertyCard = ({ property, viewType }) => {
               <div
                 key={index}
                 className={`w-1.5 h-1.5 rounded-full transition-all duration-300
-                  ${index === currentImageIndex ? 'bg-white w-3' : 'bg-white/60'}`}
+                  ${
+                    index === currentImageIndex ? "bg-white w-3" : "bg-white/60"
+                  }`}
               />
             ))}
           </div>
@@ -132,7 +135,7 @@ const PropertyCard = ({ property, viewType }) => {
 
         {/* Property Tags */}
         <div className="absolute top-4 left-4 flex flex-col gap-2">
-          <motion.span 
+          <motion.span
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="bg-gradient-to-r from-blue-600 to-blue-500 text-white 
@@ -140,7 +143,7 @@ const PropertyCard = ({ property, viewType }) => {
           >
             {property.type}
           </motion.span>
-          <motion.span 
+          <motion.span
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="bg-gradient-to-r from-green-600 to-green-500 text-white 
@@ -152,7 +155,11 @@ const PropertyCard = ({ property, viewType }) => {
       </div>
 
       {/* Content Section */}
-      <div className={`flex-1 p-6 ${isGrid ? '' : 'flex flex-col justify-between'}`}>
+      <div
+        className={`flex-1 p-6 ${
+          isGrid ? "" : "flex flex-col justify-between"
+        }`}
+      >
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center text-gray-500 text-sm">
@@ -165,8 +172,10 @@ const PropertyCard = ({ property, viewType }) => {
             </div>
           </div>
 
-          <h3 className="text-xl font-semibold text-gray-900 line-clamp-2 
-            group-hover:text-blue-600 transition-colors">
+          <h3
+            className="text-xl font-semibold text-gray-900 line-clamp-2 
+            group-hover:text-blue-600 transition-colors"
+          >
             {property.title}
           </h3>
 
@@ -176,7 +185,7 @@ const PropertyCard = ({ property, viewType }) => {
               <div className="flex items-center gap-1">
                 <IndianRupee className="w-5 h-5 text-blue-600" />
                 <span className="text-2xl font-bold text-blue-600">
-                  {Number(property.price).toLocaleString('en-IN')}
+                  {Number(property.price).toLocaleString("en-IN")}
                 </span>
               </div>
             </div>
@@ -189,13 +198,13 @@ const PropertyCard = ({ property, viewType }) => {
           <div className="flex flex-col items-center gap-1 bg-blue-50 p-2 rounded-lg">
             <BedDouble className="w-5 h-5 text-blue-600" />
             <span className="text-sm font-medium text-gray-600">
-              {property.beds} {property.beds > 1 ? 'Beds' : 'Bed'}
+              {property.beds} {property.beds > 1 ? "Beds" : "Bed"}
             </span>
           </div>
           <div className="flex flex-col items-center gap-1 bg-blue-50 p-2 rounded-lg">
             <Bath className="w-5 h-5 text-blue-600" />
             <span className="text-sm font-medium text-gray-600">
-              {property.baths} {property.baths > 1 ? 'Baths' : 'Bath'}
+              {property.baths} {property.baths > 1 ? "Baths" : "Bath"}
             </span>
           </div>
           <div className="flex flex-col items-center gap-1 bg-blue-50 p-2 rounded-lg">
@@ -205,6 +214,31 @@ const PropertyCard = ({ property, viewType }) => {
             </span>
           </div>
         </div>
+
+        {/* Amenities Section */}
+        {property.amenities && property.amenities.length > 0 && (
+          <div className="mt-6 border-t pt-4">
+            <h4 className="text-sm font-semibold text-gray-900 mb-3">
+              Amenities
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {property.amenities.slice(0, 4).map((amenity, index) => (
+                <span
+                  key={index}
+                  className="inline-flex items-center px-2.5 py-1.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-full"
+                >
+                  <CheckCircle2 className="w-3 h-3 mr-1.5 flex-shrink-0" />
+                  {amenity}
+                </span>
+              ))}
+              {property.amenities.length > 4 && (
+                <span className="inline-flex items-center px-2.5 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded-full">
+                  +{property.amenities.length - 4} more
+                </span>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </motion.div>
   );
@@ -212,7 +246,7 @@ const PropertyCard = ({ property, viewType }) => {
 
 PropertyCard.propTypes = {
   property: PropTypes.object.isRequired,
-  viewType: PropTypes.string.isRequired
+  viewType: PropTypes.string.isRequired,
 };
 
 export default PropertyCard;

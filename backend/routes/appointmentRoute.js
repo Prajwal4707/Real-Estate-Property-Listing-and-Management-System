@@ -1,5 +1,5 @@
 import express from "express";
-import { protect } from '../middleware/authmiddleware.js';
+import { protect } from "../middleware/authmiddleware.js";
 import {
   scheduleViewing,
   getAllAppointments,
@@ -9,16 +9,17 @@ import {
   updateAppointmentMeetingLink,
   getAppointmentStats,
   submitAppointmentFeedback,
-  getUpcomingAppointments
+  getUpcomingAppointments,
+  markAppointmentAsVisited,
 } from "../controller/appointmentController.js";
-
 
 const router = express.Router();
 
 // User routes
-router.post("/schedule", protect, scheduleViewing);  // Add protect middleware
-router.get("/user", getAppointmentsByUser);
+router.post("/schedule", protect, scheduleViewing); // Add protect middleware
+router.get("/user", protect, getAppointmentsByUser);
 router.put("/cancel/:id", cancelAppointment);
+router.put("/mark-visited", protect, markAppointmentAsVisited); // Add new route
 router.put("/feedback/:id", submitAppointmentFeedback);
 router.get("/upcoming", getUpcomingAppointments);
 

@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { 
-  Trash2, 
-  Edit3, 
-  Search, 
-  Filter, 
-  Plus, 
+import {
+  Trash2,
+  Edit3,
+  Search,
+  Filter,
+  Plus,
   Home,
   BedDouble,
   Bath,
   Maximize,
   MapPin,
   Building,
-  Loader 
+  Loader,
 } from "lucide-react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
@@ -25,16 +25,21 @@ const PropertyListings = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
-
   const fetchProperties = async () => {
     try {
       setLoading(true);
       const response = await axios.get(`${backendurl}/api/products/list`);
+      console.log("API Response:", response.data);
       if (response.data.success) {
-        const parsedProperties = response.data.property.map(property => ({
-          ...property,
-          amenities: parseAmenities(property.amenities)
-        }));
+        const parsedProperties = response.data.property.map((property) => {
+          console.log("Property amenities before parsing:", property.amenities);
+          const parsed = {
+            ...property,
+            amenities: parseAmenities(property.amenities),
+          };
+          console.log("Property amenities after parsing:", parsed.amenities);
+          return parsed;
+        });
         setProperties(parsedProperties);
       } else {
         toast.error(response.data.error);
@@ -46,17 +51,39 @@ const PropertyListings = () => {
       setLoading(false);
     }
   };
-
   const parseAmenities = (amenities) => {
-    if (!amenities || !Array.isArray(amenities)) return [];
-    try {
-      return typeof amenities[0] === "string" 
-        ? JSON.parse(amenities[0].replace(/'/g, '"'))
-        : amenities;
-    } catch (error) {
-      console.error("Error parsing amenities:", error);
-      return [];
+    console.log("Parsing amenities:", amenities, "Type:", typeof amenities);
+    if (!amenities) return [];
+
+    // If it's already an array, return it
+    if (Array.isArray(amenities)) {
+      console.log("Amenities is already an array");
+      return amenities;
     }
+
+    // If it's a string, try to parse it
+    if (typeof amenities === "string") {
+      try {
+        // Handle both single quotes and double quotes
+        const cleaned = amenities.replace(/'/g, '"');
+        const parsed = JSON.parse(cleaned);
+        console.log("Successfully parsed string to array:", parsed);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (error) {
+        console.error("Error parsing amenities string:", error);
+        // If parsing fails, try splitting by comma
+        if (amenities.includes(",")) {
+          const split = amenities.split(",").map((item) => item.trim());
+          console.log("Split string into array:", split);
+          return split;
+        }
+        return [];
+      }
+    }
+
+    // If it's an object or any other type, return empty array
+    console.warn("Amenities is neither array nor string:", amenities);
+    return [];
   };
 
   useEffect(() => {
@@ -67,7 +94,7 @@ const PropertyListings = () => {
     if (window.confirm(`Are you sure you want to remove "${propertyTitle}"?`)) {
       try {
         const response = await axios.post(`${backendurl}/api/products/remove`, {
-          id: propertyId
+          id: propertyId,
         });
 
         if (response.data.success) {
@@ -84,13 +111,17 @@ const PropertyListings = () => {
   };
 
   const filteredProperties = properties
-    .filter(property => {
-      const matchesSearch = !searchTerm || 
-        [property.title, property.location, property.type]
-          .some(field => field.toLowerCase().includes(searchTerm.toLowerCase()));
-      
-      const matchesType = filterType === "all" || property.type.toLowerCase() === filterType.toLowerCase();
-      
+    .filter((property) => {
+      const matchesSearch =
+        !searchTerm ||
+        [property.title, property.location, property.type].some((field) =>
+          field.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
+      const matchesType =
+        filterType === "all" ||
+        property.type.toLowerCase() === filterType.toLowerCase();
+
       return matchesSearch && matchesType;
     })
     .sort((a, b) => {
@@ -131,7 +162,7 @@ const PropertyListings = () => {
             </p>
           </div>
 
-          <Link 
+          <Link
             to="/add"
             className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
@@ -208,14 +239,16 @@ const PropertyListings = () => {
                     </span>
                   </div>
                   <div className="absolute top-4 right-4 flex space-x-2">
-                    <Link 
+                    <Link
                       to={`/update/${property._id}`}
                       className="p-2 bg-white/90 backdrop-blur-sm text-blue-600 rounded-full hover:bg-blue-600 hover:text-white transition-all"
                     >
                       <Edit3 className="w-4 h-4" />
                     </Link>
                     <button
-                      onClick={() => handleRemoveProperty(property._id, property.title)}
+                      onClick={() =>
+                        handleRemoveProperty(property._id, property.title)
+                      }
                       className="p-2 bg-white/90 backdrop-blur-sm text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-all"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -234,57 +267,67 @@ const PropertyListings = () => {
                       {property.location}
                     </div>
                   </div>
-
                   <div className="flex items-center justify-between mb-6">
                     <p className="text-2xl font-bold text-blue-600">
                       ₹{property.price.toLocaleString()}
                     </p>
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      property.availability === 'rent' 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-blue-100 text-blue-800'
-                    }`}>
+                    <span
+                      className={`px-3 py-1 rounded-full text-sm font-medium ${
+                        property.availability === "rent"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-blue-100 text-blue-800"
+                      }`}
+                    >
                       For {property.availability}
                     </span>
                   </div>
-
                   <div className="grid grid-cols-3 gap-4 mb-6">
                     <div className="flex flex-col items-center p-2 bg-gray-50 rounded-lg">
                       <BedDouble className="w-5 h-5 text-gray-400 mb-1" />
-                      <span className="text-sm text-gray-600">{property.beds} Beds</span>
+                      <span className="text-sm text-gray-600">
+                        {property.beds} Beds
+                      </span>
                     </div>
                     <div className="flex flex-col items-center p-2 bg-gray-50 rounded-lg">
                       <Bath className="w-5 h-5 text-gray-400 mb-1" />
-                      <span className="text-sm text-gray-600">{property.baths} Baths</span>
-                    </div>
+                      <span className="text-sm text-gray-600">
+                        {property.baths} Baths
+                      </span>
+                    </div>{" "}
                     <div className="flex flex-col items-center p-2 bg-gray-50 rounded-lg">
                       <Maximize className="w-5 h-5 text-gray-400 mb-1" />
-                      <span className="text-sm text-gray-600">{property.sqft} sqft</span>
+                      <span className="text-sm text-gray-600">
+                        {property.sqft} sqft
+                      </span>
                     </div>
-                  </div>
-
+                  </div>{" "}
                   {/* Amenities */}
-                  {property.amenities.length > 0 && (
-                    <div className="border-t pt-4">
-                      <h3 className="text-sm font-medium text-gray-900 mb-2">Amenities</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {property.amenities.slice(0, 3).map((amenity, index) => (
-                          <span
-                            key={index}
-                            className="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
-                          >
-                            <Building className="w-3 h-3 mr-1" />
-                            {amenity}
-                          </span>
-                        ))}
-                        {property.amenities.length > 3 && (
-                          <span className="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">
-                            +{property.amenities.length - 3} more
-                          </span>
-                        )}
+                  {Array.isArray(property.amenities) &&
+                    property.amenities.length > 0 && (
+                      <div className="border-t pt-4">
+                        <h3 className="text-sm font-medium text-gray-900 mb-2">
+                          Amenities
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                          {property.amenities
+                            .slice(0, 4)
+                            .map((amenity, index) => (
+                              <span
+                                key={index}
+                                className="inline-flex items-center px-2.5 py-1.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-full"
+                              >
+                                <Building className="w-3 h-3 mr-1.5 flex-shrink-0" />
+                                {amenity}
+                              </span>
+                            ))}
+                          {property.amenities.length > 4 && (
+                            <span className="inline-flex items-center px-2.5 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded-full">
+                              +{property.amenities.length - 4} more
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
                 </div>
               </motion.div>
             ))}

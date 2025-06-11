@@ -7,25 +7,23 @@ import { Loader } from "lucide-react";
 import { Backendurl } from "../App";
 import { authStyles } from "../styles/auth";
 import { toast } from "react-toastify";
-import { useAuth } from '../context/AuthContext';
-
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
-    password: ""
+    password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -40,7 +38,7 @@ const Login = () => {
       if (response.data.success) {
         await login(response.data.token, response.data.user);
         toast.success("Login successful!");
-        navigate("/");
+        navigate("/dashboard");
       } else {
         toast.error(response.data.message);
       }
@@ -68,14 +66,19 @@ const Login = () => {
                 BuildEstate
               </h2>
             </Link>
-            <h2 className="mt-6 text-2xl font-semibold text-gray-800">Welcome back</h2>
+            <h2 className="mt-6 text-2xl font-semibold text-gray-800">
+              Welcome back
+            </h2>
             <p className="mt-2 text-gray-600">Please sign in to your account</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
             <div className="space-y-2">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Email address
               </label>
               <input
@@ -92,7 +95,10 @@ const Login = () => {
 
             {/* Password Field */}
             <div className="space-y-2">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Password
               </label>
               <div className="relative">
@@ -111,14 +117,18 @@ const Login = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                 >
-                  {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                  {showPassword ? (
+                    <FaEyeSlash size={20} />
+                  ) : (
+                    <FaEye size={20} />
+                  )}
                 </button>
               </div>
             </div>
 
             {/* Forgot Password Link */}
             <div className="flex items-center justify-end">
-              <Link 
+              <Link
                 to="/forgot-password"
                 className="text-sm text-blue-600 hover:text-blue-700 transition-colors"
               >
@@ -145,7 +155,9 @@ const Login = () => {
                 <div className="w-full border-t border-gray-200"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Don't have an account?</span>
+                <span className="px-2 bg-white text-gray-500">
+                  Don't have an account?
+                </span>
               </div>
             </div>
 

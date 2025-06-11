@@ -63,14 +63,24 @@ const Appointments = () => {
       );
 
       if (response.data.success) {
-        toast.success(`Appointment ${newStatus} successfully`);
-        fetchAppointments();
+        toast.success(response.data.message);
+        // Always fetch appointments after successful status update
+        await fetchAppointments();
       } else {
-        toast.error(response.data.message);
+        toast.error(
+          response.data.message || "Failed to update appointment status"
+        );
       }
     } catch (error) {
       console.error("Error updating appointment:", error);
-      toast.error("Failed to update appointment status");
+      // More detailed error message
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to update appointment status";
+      toast.error(errorMessage);
+      // Refresh the list anyway in case the update succeeded but the response failed
+      await fetchAppointments();
     }
   };
 

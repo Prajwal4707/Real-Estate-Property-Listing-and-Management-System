@@ -13,6 +13,7 @@ import {
   MessageCircle,
   Sparkles,
   BotMessageSquare,
+  Calendar,
 } from "lucide-react";
 import logo from "../assets/home-regular-24.png";
 import { useAuth } from "../context/AuthContext";
@@ -141,6 +142,7 @@ const Navbar = () => {
                         transition={{ duration: 0.2 }}
                         className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg py-2 border border-gray-100 overflow-hidden"
                       >
+                        {" "}
                         <div className="px-4 py-3 border-b border-gray-100">
                           <p className="text-sm font-semibold text-gray-900">
                             {user?.name}
@@ -149,14 +151,23 @@ const Navbar = () => {
                             {user?.email}
                           </p>
                         </div>
-                        <motion.button
-                          whileHover={{ x: 5 }}
-                          onClick={handleLogout}
-                          className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 flex items-center space-x-2 transition-colors"
-                        >
-                          <LogOut className="w-4 h-4" />
-                          <span>Sign out</span>
-                        </motion.button>
+                        <div className="py-1">
+                          <Link
+                            to="/my-bookings"
+                            className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 flex items-center space-x-2 transition-colors"
+                          >
+                            <Calendar className="w-4 h-4" />
+                            <span>My Bookings</span>
+                          </Link>
+                          <motion.button
+                            whileHover={{ x: 5 }}
+                            onClick={handleLogout}
+                            className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 flex items-center space-x-2 transition-colors"
+                          >
+                            <LogOut className="w-4 h-4" />
+                            <span>Sign out</span>
+                          </motion.button>
+                        </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -425,6 +436,7 @@ const MobileNavLinks = ({
       <div className="pt-4 mt-2 border-t border-gray-100">
         {isLoggedIn ? (
           <div className="space-y-3 px-3">
+            {" "}
             <div className="flex items-center space-x-3 p-2 bg-gray-50 rounded-lg">
               <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center text-white font-medium text-sm shadow-sm">
                 {user?.name ? user.name[0].toUpperCase() : "U"}
@@ -436,6 +448,14 @@ const MobileNavLinks = ({
                 <p className="text-xs text-gray-500 truncate">{user?.email}</p>
               </div>
             </div>
+            <Link
+              to="/my-bookings"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
+            >
+              <Calendar className="w-5 h-5" />
+              <span className="font-medium">My Bookings</span>
+            </Link>
             <motion.button
               whileTap={{ scale: 0.97 }}
               onClick={() => {

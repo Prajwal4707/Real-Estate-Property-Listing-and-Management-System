@@ -1,20 +1,20 @@
-import React from 'react';
-import { motion, useInView, useMotionValue, useSpring } from 'framer-motion';
-import { Building2, Home, Target } from 'lucide-react';
-import CountUp from './Contup';
+import React from "react";
+import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
+import { Building2, Home, Target } from "lucide-react";
+import CountUp from "./Contup";
 
 const milestones = [
   {
     icon: Home,
-    title: 'Properties Listed',
+    title: "Properties Listed",
     value: 5000,
-    description: 'And growing daily',
+    description: "And growing daily",
   },
   {
     icon: Target,
-    title: 'Happy Clients',
+    title: "Happy Clients",
     value: 10000,
-    description: 'Satisfied customers',
+    description: "Satisfied customers",
   },
 ];
 
@@ -52,7 +52,12 @@ export default function Milestones() {
                   <Icon className="w-12 h-12 text-blue-600" />
                 </div>
                 <h3 className="text-5xl font-bold text-blue-600 mb-4">
-                  <CountUp from={0} to={milestone.value} duration={2} separator="," />
+                  <CountUp
+                    from={0}
+                    to={milestone.value}
+                    duration={2}
+                    separator=","
+                  />
                 </h3>
                 <p className="text-2xl font-semibold mb-3">{milestone.title}</p>
                 <p className="text-gray-600 text-lg">{milestone.description}</p>

@@ -240,13 +240,13 @@ const helpLinks = [
 const contactInfo = [
   {
     icon: MapPin,
-    text: "123 Property Plaza, Silicon Valley, CA 94088",
-    href: "https://maps.google.com/?q=123+Property+Plaza,Silicon+Valley,CA+94088",
+    text: "42/1 Park Street, Kolkata, West Bengal 700016",
+    href: "https://maps.google.com/?q=42/1+Park+Street+Kolkata+West+Bengal+700016",
   },
   {
     icon: Phone,
-    text: "+1 (234) 567-890",
-    href: "tel:+1234567890",
+    text: "+91 98765 43210",
+    href: "tel:+91 98765 43210",
   },
   {
     icon: Mail,
