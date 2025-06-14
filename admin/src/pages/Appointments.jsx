@@ -24,26 +24,42 @@ const Appointments = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [editingMeetingLink, setEditingMeetingLink] = useState(null);
   const [meetingLink, setMeetingLink] = useState("");
-
   const fetchAppointments = async () => {
     try {
       setLoading(true);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Please login to access admin panel");
+        return;
+      }
+
       const response = await axios.get(`${backendurl}/api/appointments/all`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.data.success) {
-        // Filter out appointments with missing user data
+        // Filter out appointments with missing or invalid data
         const validAppointments = response.data.appointments.filter(
-          (apt) => apt.userId && apt.propertyId
+          (apt) => apt && apt.userId && apt.propertyId && apt.propertyId.title
         );
+
+        if (validAppointments.length < response.data.appointments.length) {
+          console.warn("Some appointments have missing or invalid data");
+        }
+
         setAppointments(validAppointments);
       } else {
-        toast.error(response.data.message);
+        toast.error(response.data.message || "Failed to fetch appointments");
       }
     } catch (error) {
       console.error("Error fetching appointments:", error);
-      toast.error("Failed to fetch appointments");
+      if (error.response?.status === 401) {
+        toast.error("Session expired. Please login again");
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to fetch appointments"
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -119,13 +135,18 @@ const Appointments = () => {
   useEffect(() => {
     fetchAppointments();
   }, []);
-
   const filteredAppointments = appointments.filter((apt) => {
+    if (!apt || !apt.propertyId || !apt.userId) return false;
+
     const matchesSearch =
       searchTerm === "" ||
-      apt.propertyId?.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      apt.userId?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      apt.userId?.email?.toLowerCase().includes(searchTerm.toLowerCase());
+      (apt.propertyId.title || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      (apt.userId.name || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      (apt.userId.email || "").toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesFilter = filter === "all" || apt.status === filter;
 
@@ -228,21 +249,22 @@ const Appointments = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="hover:bg-gray-50"
                   >
-                    {/* Property Details */}
+                    {/* Property Details */}{" "}
                     <td className="px-6 py-4">
                       <div className="flex items-center">
                         <Home className="w-5 h-5 text-gray-400 mr-2" />
                         <div>
                           <p className="font-medium text-gray-900">
-                            {appointment.propertyId.title}
+                            {appointment.propertyId?.title ||
+                              "Property Unavailable"}
                           </p>
                           <p className="text-sm text-gray-500">
-                            {appointment.propertyId.location}
+                            {appointment.propertyId?.location ||
+                              "Location not available"}
                           </p>
                         </div>
                       </div>
                     </td>
-
                     {/* Client Details */}
                     <td className="px-6 py-4">
                       <div className="flex items-center">
@@ -257,7 +279,6 @@ const Appointments = () => {
                         </div>
                       </div>
                     </td>
-
                     {/* Date & Time */}
                     <td className="px-6 py-4">
                       <div className="flex items-center">
@@ -273,7 +294,6 @@ const Appointments = () => {
                         </div>
                       </div>
                     </td>
-
                     {/* Status */}
                     <td className="px-6 py-4">
                       <span
@@ -285,7 +305,6 @@ const Appointments = () => {
                           appointment.status.slice(1)}
                       </span>
                     </td>
-
                     {/* Meeting Link */}
                     <td className="px-6 py-4">
                       {editingMeetingLink === appointment._id ? (
@@ -344,7 +363,6 @@ const Appointments = () => {
                         </div>
                       )}
                     </td>
-
                     {/* Actions */}
                     <td className="px-6 py-4">
                       {appointment.status === "pending" && (

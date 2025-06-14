@@ -23,23 +23,44 @@ const Appointments = () => {
   useEffect(() => {
     fetchAppointments();
   }, []);
-
   const fetchAppointments = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Please login to view appointments");
+        navigate("/login");
+        return;
+      }
+
       const response = await axios.get(`${Backendurl}/api/appointments/user`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.data.success) {
-        setAppointments(response.data.appointments);
+        // Filter out appointments with missing or invalid data
+        const validAppointments = response.data.appointments.filter(
+          (apt) => apt && apt.propertyId && apt.propertyId.title
+        );
+
+        if (validAppointments.length < response.data.appointments.length) {
+          console.warn("Some appointments have missing or invalid data");
+        }
+
+        setAppointments(validAppointments);
       } else {
-        toast.error("Failed to fetch appointments");
+        toast.error(response.data.message || "Failed to fetch appointments");
       }
     } catch (error) {
       console.error("Error fetching appointments:", error);
-      toast.error("Error fetching appointments");
+      if (error.response?.status === 401) {
+        toast.error("Session expired. Please login again");
+        navigate("/login");
+      } else {
+        toast.error(
+          error.response?.data?.message || "Error fetching appointments"
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -223,6 +244,16 @@ const Appointments = () => {
     }).format(amount);
   };
   const filteredAppointments = appointments.filter((appointment) => {
+    // First check if the appointment is valid
+    if (
+      !appointment ||
+      !appointment.propertyId ||
+      !appointment.date ||
+      !appointment.status
+    ) {
+      return false;
+    }
+
     const now = new Date();
     if (filter === "upcoming") {
       return (
@@ -303,12 +334,15 @@ const Appointments = () => {
                     <div className="flex items-center">
                       <Home className="w-5 h-5 text-gray-400 mr-3" />
                       <div>
+                        {" "}
                         <h3 className="text-lg font-semibold text-gray-900">
-                          {appointment.propertyId.title}
+                          {appointment.propertyId?.title ||
+                            "Property Unavailable"}
                         </h3>
                         <div className="flex items-center text-sm text-gray-600 mt-1">
                           <MapPin className="w-4 h-4 mr-1" />
-                          {appointment.propertyId.location}
+                          {appointment.propertyId?.location ||
+                            "Location not available"}
                         </div>
                       </div>
                     </div>
