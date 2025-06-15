@@ -1,5 +1,5 @@
 import express from "express";
-import { isAdmin } from "../middleware/adminMiddleware.js";
+import { verifyAdmin } from "../middleware/adminMiddleware.js";
 import { protect as protectRoute } from "../middleware/authmiddleware.js";
 import {
   getBookedProperties,
@@ -10,8 +10,8 @@ import {
 const router = express.Router();
 
 // Admin routes
-router.get("/booked", protectRoute, isAdmin, getBookedProperties);
-router.post("/book", protectRoute, isAdmin, bookProperty);
-router.delete("/:propertyId/cancel", protectRoute, isAdmin, cancelBooking);
+router.get("/booked", protectRoute, verifyAdmin, getBookedProperties);
+router.post("/book", protectRoute, verifyAdmin, bookProperty);
+router.delete("/:propertyId/cancel", protectRoute, verifyAdmin, cancelBooking);
 
 export default router;

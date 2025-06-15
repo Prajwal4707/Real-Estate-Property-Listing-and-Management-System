@@ -135,23 +135,64 @@ const resetpassword = async (req, res) => {
 const adminlogin = async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log("Attempting admin login for:", email);
 
-    if (
-      email === process.env.ADMIN_EMAIL &&
-      password === process.env.ADMIN_PASSWORD
-    ) {
-      const token = jwt.sign({ email }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      console.log("User not found");
+      return res.status(401).json({
+        message: "Invalid admin credentials",
+        success: false,
       });
-      return res.json({ token, success: true });
-    } else {
-      return res
-        .status(400)
-        .json({ message: "Invalid credentials", success: false });
     }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      console.log("Password mismatch");
+      return res.status(401).json({
+        message: "Invalid admin credentials",
+        success: false,
+      });
+    }
+
+    // Check if user is an admin
+    if (!user.isAdmin) {
+      console.log("User is not an admin");
+      return res.status(403).json({
+        message: "Access denied. Not an admin account.",
+        success: false,
+      });
+    }
+
+    // Create token with admin info
+    const token = jwt.sign(
+      {
+        id: user._id,
+        email: user.email,
+        isAdmin: true,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    console.log("Admin login successful");
+    return res.json({
+      success: true,
+      token,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: true,
+      },
+    });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Server error", success: false });
+    console.error("Admin login error:", error);
+    return res.status(500).json({
+      message: "Server error during admin login",
+      success: false,
+    });
   }
 };
 

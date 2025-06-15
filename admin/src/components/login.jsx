@@ -16,27 +16,38 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
       // Change the endpoint to /api/users/admin for admin login
       const response = await axios.post(`${backendUrl}/api/users/admin`, {
         email,
-        password
+        password,
       });
 
       if (response.data.success) {
-        // Store the admin token
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('isAdmin', 'true');
-        
+        // Clear any existing tokens first
+        localStorage.clear();
+
+        // Store the admin token and related data
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("isAdmin", "true");
+        localStorage.setItem("userId", response.data.user._id);
+
+        // Set default authorization header for all future requests
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${response.data.token}`;
+
         toast.success("Admin login successful!");
         navigate("/dashboard");
       } else {
         toast.error(response.data.message || "Login failed");
       }
     } catch (error) {
-      console.error('Error logging in:', error);
-      toast.error(error.response?.data?.message || 'Invalid admin credentials');
+      console.error("Error logging in:", error);
+      toast.error(error.response?.data?.message || "Invalid admin credentials");
+      // Clear any invalid tokens
+      localStorage.clear();
     } finally {
       setLoading(false);
     }

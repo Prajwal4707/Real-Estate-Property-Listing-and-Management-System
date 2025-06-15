@@ -1,5 +1,5 @@
 // Check if user is an admin
-export const isAdmin = async (req, res, next) => {
+export const verifyAdmin = async (req, res, next) => {
   try {
     // User object is attached by protectRoute middleware
     if (!req.user) {

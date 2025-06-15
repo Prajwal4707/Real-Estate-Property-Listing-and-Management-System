@@ -47,6 +47,29 @@ const propertySchema = new mongoose.Schema(
       required: true,
       default: [],
     },
+    isBlocked: {
+      type: Boolean,
+      default: false,
+    },
+    isBooked: {
+      type: Boolean,
+      default: false,
+    },
+    bookedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    bookingDate: {
+      type: Date,
+    },
+    tokenAmount: {
+      type: Number,
+    },
+    paymentStatus: {
+      type: String,
+      enum: ["pending", "verified", "failed"],
+      default: "pending",
+    },
     phone: {
       type: String,
       required: true,

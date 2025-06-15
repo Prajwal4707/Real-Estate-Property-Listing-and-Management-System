@@ -5,7 +5,7 @@ import {
   Clock,
   MapPin,
   CheckCircle,
-  DollarSign,
+  IndianRupee,
   AlertCircle,
 } from "lucide-react";
 import { toast } from "react-toastify";
@@ -189,7 +189,7 @@ const AppointmentList = () => {
                     onClick={() => handlePayment(appointment._id)}
                     className="w-full mt-4 flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                   >
-                    <DollarSign className="w-4 h-4" />
+                    <IndianRupee className="w-4 h-4" />
                     Pay Token Amount
                   </button>
                 )}
