@@ -395,7 +395,7 @@ export const cancelAppointment = async (req, res) => {
 
     // Send cancellation email
     const mailOptions = {
-      from: process.env.EMAIL,
+      from: `BuildEstate <${process.env.EMAIL}>`,
       to: appointment.userId.email,
       subject: "Appointment Cancelled - BuildEstate",
       html: `

@@ -92,7 +92,7 @@ const forgotpassword = async (req, res) => {
     await user.save();
     const resetUrl = `${process.env.WEBSITE_URL}/reset/${resetToken}`;
     const mailOptions = {
-      from: process.env.EMAIL,
+      from: `BuildEstate <${process.env.EMAIL}>`,
       to: email,
       subject: "Password Reset - BuildEstate Security",
       html: getPasswordResetTemplate(resetUrl),

@@ -97,18 +97,27 @@ export const cancelBooking = async (req, res) => {
       });
     }
 
-    if (!property.isBooked) {
-      return res.status(400).json({
-        success: false,
-        message: "Property is not booked",
-      });
-    }
-
     // Reset booking status
     property.isBooked = false;
     property.bookedBy = null;
     property.bookingDate = null;
+    property.tokenAmount = null;
+    property.paymentStatus = "pending";
+    property.isBlocked = false;
+    property.availability = "Available";
     await property.save();
+
+    // Update associated appointments
+    await Appointment.updateMany(
+      { propertyId },
+      { 
+        status: "cancelled",
+        payment: {
+          status: "refunded",
+          refundedAt: new Date()
+        }
+      }
+    );
 
     res.json({
       success: true,

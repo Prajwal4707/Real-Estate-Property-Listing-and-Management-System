@@ -20,6 +20,14 @@ const BookedProperties = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Set up axios defaults
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
+  }, []);
+
   const fetchBookedProperties = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -31,31 +39,33 @@ const BookedProperties = () => {
       setLoading(true);
       setError(null);
 
-      const response = await axios.get(`${backendurl}/api/bookings/booked`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(`${backendurl}/api/bookings/booked`);
 
       if (response.data.success && Array.isArray(response.data.properties)) {
-        // Validate and process the properties
-        const processedProperties = response.data.properties.map((property) => {
-          // Ensure all required fields have default values
-          return {
-            _id: property._id || "",
-            title: property.title || "Untitled Property",
-            location: property.location || "Location not specified",
-            price: property.price || 0,
-            tokenAmount: property.tokenAmount || 0,
-            image: Array.isArray(property.image) ? property.image : [],
-            bookedBy: property.bookedBy || null,
-            bookingDate: property.bookingDate || null,
-            paymentStatus: property.paymentStatus || "pending",
-            isBlocked: property.isBlocked || false,
-          };
+        // Create a Map to store unique properties by their ID
+        const uniqueProperties = new Map();
+        
+        // Process and deduplicate properties
+        response.data.properties.forEach((property) => {
+          if (property._id) {
+            console.log("Raw tokenAmount for property", property._id, ":", property.tokenAmount); // Debug log
+            uniqueProperties.set(property._id, {
+              _id: property._id || "",
+              title: property.title || "Untitled Property",
+              location: property.location || "Location not specified",
+              price: property.price || 0,
+              tokenAmount: property.tokenAmount || 0,
+              image: Array.isArray(property.image) ? property.image : [],
+              bookedBy: property.bookedBy || null,
+              bookingDate: property.bookingDate || null,
+              paymentStatus: property.paymentStatus || "pending",
+              isBlocked: property.isBlocked || false,
+            });
+          }
         });
 
-        setProperties(processedProperties);
+        // Convert Map values back to array
+        setProperties(Array.from(uniqueProperties.values()));
       } else {
         console.error("Invalid response format:", response.data);
         setError("Invalid data received from server");
@@ -72,7 +82,7 @@ const BookedProperties = () => {
     }
   };
 
-  const handleVerifyPayment = async (appointmentId) => {
+  const handleVerifyPayment = async (propertyId) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -81,21 +91,17 @@ const BookedProperties = () => {
       }
 
       console.log(
-        "Attempting to verify payment for appointmentId:",
-        appointmentId
+        "Attempting to verify payment for propertyId:",
+        propertyId
       );
-      const url = `${backendurl}/api/bookings/verify-payment/${appointmentId}`;
+      const url = `${backendurl}/api/properties/${propertyId}/verify-payment`;
       console.log("Sending PUT request to URL:", url);
 
-      const response = await axios.put(
-        url,
-        {},
-        {
+      const response = await axios.put(url, {}, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
-      );
+      });
 
       if (response.data.success) {
         toast.success("Payment verified successfully");
@@ -103,15 +109,25 @@ const BookedProperties = () => {
       }
     } catch (error) {
       console.error("Error verifying payment:", error);
-      toast.error("Failed to verify payment");
+      toast.error(error.response?.data?.message || "Failed to verify payment");
     }
   };
 
   const handleBlockProperty = async (propertyId) => {
     try {
       const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Not authenticated. Please login again.");
+        return;
+      }
+
+      if (!window.confirm("Are you sure you want to block this property?")) {
+        return;
+      }
+
+      console.log("Attempting to block property:", propertyId);
       const response = await axios.put(
-        `${backendurl}/api/properties/${propertyId}/block`,
+        `${backendurl}/api/property/${propertyId}/block`,
         {},
         {
           headers: {
@@ -122,18 +138,38 @@ const BookedProperties = () => {
 
       if (response.data.success) {
         toast.success("Property blocked successfully");
-        fetchBookedProperties();
+        // Update the specific property in the state
+        setProperties(prevProperties => 
+          prevProperties.map(property => 
+            property._id === propertyId 
+              ? { ...property, isBlocked: true }
+              : property
+          )
+        );
+      } else {
+        toast.error(response.data.message || "Failed to block property");
       }
     } catch (error) {
-      toast.error("Failed to block property");
+      console.error("Error blocking property:", error);
+      toast.error(error.response?.data?.message || "Failed to block property");
     }
   };
 
   const handleUnblockProperty = async (propertyId) => {
     try {
       const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Not authenticated. Please login again.");
+        return;
+      }
+
+      if (!window.confirm("Are you sure you want to unblock this property?")) {
+        return;
+      }
+
+      console.log("Attempting to unblock property:", propertyId);
       const response = await axios.put(
-        `${backendurl}/api/properties/${propertyId}/unblock`,
+        `${backendurl}/api/property/${propertyId}/unblock`,
         {},
         {
           headers: {
@@ -144,10 +180,20 @@ const BookedProperties = () => {
 
       if (response.data.success) {
         toast.success("Property unblocked successfully");
-        fetchBookedProperties();
+        // Update the specific property in the state
+        setProperties(prevProperties => 
+          prevProperties.map(property => 
+            property._id === propertyId 
+              ? { ...property, isBlocked: false }
+              : property
+          )
+        );
+      } else {
+        toast.error(response.data.message || "Failed to unblock property");
       }
     } catch (error) {
-      toast.error("Failed to unblock property");
+      console.error("Error unblocking property:", error);
+      toast.error(error.response?.data?.message || "Failed to unblock property");
     }
   };
 
@@ -159,6 +205,11 @@ const BookedProperties = () => {
         return;
       }
 
+      if (!window.confirm("Are you sure you want to remove this property from booked list?")) {
+        return;
+      }
+
+      console.log("Attempting to remove property from booked list:", propertyId);
       const response = await axios.delete(
         `${backendurl}/api/bookings/${propertyId}/cancel`,
         {
@@ -169,14 +220,17 @@ const BookedProperties = () => {
       );
 
       if (response.data.success) {
-        toast.success("Property booking cancelled successfully");
-        fetchBookedProperties();
+        toast.success("Property removed from booked list successfully");
+        // Remove only the specific property from the state
+        setProperties(prevProperties => 
+          prevProperties.filter(property => property._id !== propertyId)
+        );
+      } else {
+        toast.error(response.data.message || "Failed to remove property from booked list");
       }
     } catch (error) {
-      console.error("Error cancelling property booking:", error);
-      toast.error(
-        error.response?.data?.message || "Failed to cancel property booking"
-      );
+      console.error("Error removing property from booked list:", error);
+      toast.error(error.response?.data?.message || "Failed to remove property from booked list");
     }
   };
 
@@ -197,22 +251,23 @@ const BookedProperties = () => {
 
   const formatCurrency = (amount) => {
     // Convert the amount to a number if it's not already
-    const numericAmount =
-      typeof amount === "string" ? parseFloat(amount) : amount;
+    const numericAmount = typeof amount === "string" ? parseFloat(amount) : amount;
 
     // Use the default amount if the value is not a valid number
     const validAmount = !isNaN(numericAmount) ? numericAmount : 0;
 
+    // Format the number with Indian currency format
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: "INR",
       maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
     }).format(validAmount);
   };
 
   return (
-    <div className="px-6 py-8">
-      <h1 className="text-2xl font-bold mb-6">Booked Properties</h1>
+    <div className="container mx-auto px-4 py-8 pt-20">
+      <h2 className="text-3xl font-bold text-gray-800 mb-6">Booked Properties</h2>
 
       {error && (
         <div className="text-red-500 mb-4 p-4 bg-red-50 rounded">
@@ -221,7 +276,7 @@ const BookedProperties = () => {
       )}
 
       {loading ? (
-        <div className="flex items-center justify-center min-h-screen">
+        <div className="flex justify-center items-center py-8 min-h-screen">
           <Loader className="w-8 h-8 animate-spin" />
         </div>
       ) : properties.length === 0 ? (
@@ -272,7 +327,9 @@ const BookedProperties = () => {
                     <span>
                       Token Amount:{" "}
                       {property.tokenAmount ? (
-                        formatCurrency(property.tokenAmount)
+                        <span className="font-medium">
+                          ₹{(Number(property.tokenAmount) / 100).toLocaleString('en-IN')}
+                        </span>
                       ) : (
                         <span className="text-yellow-600 bg-yellow-50 px-2 py-0.5 rounded text-xs">
                           Amount pending
@@ -329,21 +386,12 @@ const BookedProperties = () => {
                 </div>
 
                 <div className="flex gap-2 mt-4">
-                  {!property.paymentStatus ||
-                  property.paymentStatus !== "verified" ? (
+                  {property.isBlocked ? (
                     <button
-                      onClick={async () => {
-                        if (
-                          window.confirm(
-                            "Are you sure you want to verify this payment?"
-                          )
-                        ) {
-                          await handleVerifyPayment(property._id);
-                        }
-                      }}
+                      onClick={() => handleUnblockProperty(property._id)}
                       className="px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm flex items-center"
                     >
-                      Verify Payment
+                      <UnlockIcon className="w-4 h-4 mr-1" /> Unblock
                     </button>
                   ) : (
                     <button

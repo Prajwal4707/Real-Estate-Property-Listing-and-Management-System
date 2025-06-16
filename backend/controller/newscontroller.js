@@ -15,7 +15,7 @@ const submitNewsletter = async (req, res) => {
     const savedNewsletter = await newNewsletter.save();
 
     const mailOptions = {
-      from: process.env.EMAIL,
+      from: `BuildEstate <${process.env.EMAIL}>`,
       to: email,
       subject: "Welcome to BuildEstate Newsletter! 🏠",
       html: getNewsletterTemplate(email),

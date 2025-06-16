@@ -123,7 +123,7 @@ const seedProperties = async () => {
       {
         title: "Contemporary Home in DLF Phase 1",
         location: "Gurgaon, India",
-        price: 35000000, // 3.5 Crores
+        price: 5500000, // 55 Lakhs
         image: [
           "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3",
           "https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?ixlib=rb-4.0.3",
@@ -147,7 +147,7 @@ const seedProperties = async () => {
       {
         title: "Premium Flat in Indiranagar",
         location: "Bangalore, India",
-        price: 9500000, // 95 Lakhs
+        price: 6000000, // 60 Lakhs
         image: [
           "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?ixlib=rb-4.0.3",
           "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?ixlib=rb-4.0.3",
@@ -196,10 +196,10 @@ const seedProperties = async () => {
       {
         title: "Garden Villa in Koramangala",
         location: "Bangalore, India",
-        price: 42000000, // 4.2 Crores
+        price: 5000000, // 50 Lakhs
         image: [
-          "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3",
-          "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?ixlib=rb-4.0.3",
+          "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
+          "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b",
         ],
         beds: 5,
         baths: 6,
@@ -221,10 +221,10 @@ const seedProperties = async () => {
       {
         title: "Premium Apartment in HSR Layout",
         location: "Bangalore, India",
-        price: 8500000, // 85 Lakhs
+        price: 7500000, // 75 Lakhs
         image: [
-          "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3",
-          "https://images.unsplash.com/photo-1565182999561-18d7dc61c393?ixlib=rb-4.0.3",
+          "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267",
+          "https://images.unsplash.com/photo-1565182999561-18d7dc61c393",
         ],
         beds: 3,
         baths: 3,
@@ -241,6 +241,53 @@ const seedProperties = async () => {
           "24/7 Security",
         ],
         phone: "+91-900-000-0007",
+      },
+      {
+        title: "Modern Studio Apartment in Pune",
+        location: "Pune, Maharashtra",
+        price: 6500000, // 65 Lakhs
+        image: [
+          "https://images.unsplash.com/photo-1574362848149-11496d93a7c7",
+          "https://images.unsplash.com/photo-1484154218962-a197022b5858",
+        ],
+        beds: 1,
+        baths: 1,
+        sqft: 600,
+        type: "Apartment",
+        availability: "Available",
+        description:
+          "A sleek and modern studio apartment in a prime area of Pune, perfect for bachelors or young couples.",
+        amenities: [
+          "Gym",
+          "Lift",
+          "24/7 Security",
+          "Parking",
+          "Intercom",
+        ],
+        phone: "+91-900-000-0010",
+      },
+      {
+        title: "Spacious Bungalow in Chandigarh",
+        location: "Chandigarh, Punjab",
+        price: 28000000, // 2.8 Crores
+        image: [
+          "https://images.unsplash.com/photo-1580587771525-78b9dba3b914",
+          "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf",
+        ],
+        beds: 4,
+        baths: 4,
+        sqft: 3000,
+        type: "House",
+        availability: "Available",
+        description:
+          "A spacious bungalow in a green and serene locality of Chandigarh, offering a blend of comfort and luxury.",
+        amenities: [
+          "Garden",
+          "Parking",
+          "Power Backup",
+          "Modular Kitchen",
+        ],
+        phone: "+91-900-000-0009",
       },
     ];
 

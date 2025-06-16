@@ -126,7 +126,8 @@ const addproperty = async (req, res) => {
 
 const listproperty = async (req, res) => {
   try {
-    const property = await Property.find();
+    // Only get properties that are not blocked
+    const property = await Property.find({ isBlocked: { $ne: true } });
     res.json({ property, success: true });
   } catch (error) {
     console.log("Error listing products: ", error);
@@ -245,21 +246,26 @@ const updateproperty = async (req, res) => {
 
 const singleproperty = async (req, res) => {
   try {
-    const { id } = req.params;
-    const property = await Property.findById(id);
+    const property = await Property.findById(req.params.id);
+    
     if (!property) {
-      return res
-        .status(404)
-        .json({ message: "Property not found", success: false });
+      return res.status(404).json({ 
+        message: "Property not found", 
+        success: false 
+      });
     }
 
-    // Increment the views count
-    property.views = (property.views || 0) + 1;
-    await property.save();
+    // Check if property is blocked
+    if (property.isBlocked) {
+      return res.status(403).json({ 
+        message: "This property is not available", 
+        success: false 
+      });
+    }
 
     res.json({ property, success: true });
   } catch (error) {
-    console.log("Error fetching property:", error);
+    console.log("Error getting single property: ", error);
     res.status(500).json({ message: "Server Error", success: false });
   }
 };
