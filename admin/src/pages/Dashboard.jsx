@@ -219,21 +219,21 @@ const Dashboard = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="min-h-screen pt-32 px-4 bg-gray-50"
+      className="min-h-screen pt-24 sm:pt-32 px-2 sm:px-4 bg-gray-50"
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto w-full">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4 sm:gap-0">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-1">Dashboard</h1>
-            <p className="text-gray-600">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">Dashboard</h1>
+            <p className="text-gray-600 text-sm sm:text-base">
               Overview of your property management system
             </p>
           </div>
           <button
             onClick={fetchStats}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 
-              transition-colors duration-200 flex items-center gap-2"
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 \
+              transition-colors duration-200 flex items-center gap-2 text-sm sm:text-base"
           >
             <TrendingUp className="w-4 h-4" />
             Refresh Data
@@ -241,53 +241,53 @@ const Dashboard = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           {statCards.map((stat, index) => (
             <motion.div
               key={stat.title}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+              className="bg-white p-4 sm:p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
             >
-              <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 rounded-lg ${stat.color}`}>
-                  <stat.icon className="w-6 h-6 text-white" />
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <div className={`p-2 sm:p-3 rounded-lg ${stat.color}`}>
+                  <stat.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <span className="text-sm font-medium text-gray-500">
+                <span className="text-xs sm:text-sm font-medium text-gray-500">
                   Last 30 days
                 </span>
               </div>
-              <h3 className="text-lg font-medium text-gray-900">
+              <h3 className="text-base sm:text-lg font-medium text-gray-900">
                 {stat.title}
               </h3>
-              <p className="text-3xl font-bold text-gray-900 mt-2">
+              <p className="text-2xl sm:text-3xl font-bold text-gray-900 mt-1 sm:mt-2">
                 {stat.value}
               </p>
-              <p className="text-sm text-gray-500 mt-1">{stat.description}</p>
+              <p className="text-xs sm:text-sm text-gray-500 mt-1">{stat.description}</p>
             </motion.div>
           ))}
         </div>
 
         {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           {/* Property Views Chart */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white p-6 rounded-lg shadow-lg"
+            className="bg-white p-4 sm:p-6 rounded-lg shadow-lg overflow-x-auto"
           >
-            <h2 className="text-xl font-bold text-gray-900 mb-6 flex justify-between items-center">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6 flex justify-between items-center">
               <span>Property Views</span>
               <button
                 onClick={handleResetViews}
-                className="px-3 py-1 bg-red-500 text-white rounded-md text-sm hover:bg-red-600 transition-colors flex items-center gap-1"
+                className="px-2 sm:px-3 py-1 bg-red-500 text-white rounded-md text-xs sm:text-sm hover:bg-red-600 transition-colors flex items-center gap-1"
               >
                 <RefreshCcw className="w-3 h-3" />
                 Reset Views
               </button>
             </h2>
-            <div className="h-[400px]">
+            <div className="h-[300px] sm:h-[400px] min-w-[320px]">
               {stats.viewsData && Object.keys(stats.viewsData).length > 0 ? (
                 <Line data={stats.viewsData} options={chartOptions} />
               ) : (
@@ -302,12 +302,12 @@ const Dashboard = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white p-6 rounded-lg shadow-lg"
+            className="bg-white p-4 sm:p-6 rounded-lg shadow-lg"
           >
-            <h2 className="text-xl font-bold text-gray-900 mb-6">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">
               Recent Activity
             </h2>
-            <div className="space-y-4 max-h-[400px] overflow-y-auto">
+            <div className="space-y-3 sm:space-y-4 max-h-[300px] sm:max-h-[400px] overflow-y-auto">
               {stats.recentActivity?.length > 0 ? (
                 stats.recentActivity.map((activity, index) => (
                   <motion.div
@@ -315,24 +315,24 @@ const Dashboard = () => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-lg 
+                    className="flex items-center gap-3 sm:gap-4 p-2 sm:p-3 hover:bg-gray-50 rounded-lg \
                       transition-colors duration-200"
                   >
-                    <div className="p-2 bg-blue-100 rounded-lg">
-                      <Users className="w-5 h-5 text-blue-600" />
+                    <div className="p-1 sm:p-2 bg-blue-100 rounded-lg">
+                      <Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">
+                      <p className="font-medium text-gray-900 text-xs sm:text-base">
                         {activity.description}
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-xs sm:text-sm text-gray-500">
                         {new Date(activity.timestamp).toLocaleString()}
                       </p>
                     </div>
                   </motion.div>
                 ))
               ) : (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-6 sm:py-8 text-gray-500 text-xs sm:text-base">
                   No recent activity
                 </div>
               )}

@@ -266,11 +266,11 @@ const BookedProperties = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 pt-20">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">Booked Properties</h2>
+    <div className="container mx-auto px-2 sm:px-4 py-8 pt-20">
+      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">Booked Properties</h2>
 
       {error && (
-        <div className="text-red-500 mb-4 p-4 bg-red-50 rounded">
+        <div className="text-red-500 mb-4 p-4 bg-red-50 rounded text-sm sm:text-base">
           Error: {error}
         </div>
       )}
@@ -280,17 +280,17 @@ const BookedProperties = () => {
           <Loader className="w-8 h-8 animate-spin" />
         </div>
       ) : properties.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-gray-500">No booked properties found</p>
+        <div className="text-center py-8 sm:py-12">
+          <p className="text-gray-500 text-sm sm:text-base">No booked properties found</p>
         </div>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
           {properties.map((property) => (
             <motion.div
               key={property._id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-lg shadow-lg overflow-hidden relative"
+              className="bg-white rounded-lg shadow-lg overflow-hidden relative flex flex-col"
             >
               <button
                 onClick={() => handleDeleteProperty(property._id)}
@@ -302,16 +302,16 @@ const BookedProperties = () => {
               <img
                 src={property.image?.[0] || "/placeholder-property.jpg"}
                 alt={property.title || "Property Image"}
-                className="w-full h-48 object-cover"
+                className="w-full h-40 sm:h-48 object-cover"
                 onError={(e) => {
                   e.target.onerror = null;
                   e.target.src = "/placeholder-property.jpg";
                 }}
               />
-              <div className="p-4 space-y-4">
-                <h3 className="text-xl font-semibold">{property.title}</h3>
+              <div className="p-3 sm:p-4 space-y-3 sm:space-y-4 flex-1 flex flex-col justify-between">
+                <h3 className="text-lg sm:text-xl font-semibold">{property.title}</h3>
 
-                <div className="space-y-2 text-sm">
+                <div className="space-y-1 sm:space-y-2 text-xs sm:text-sm">
                   <div className="flex items-center text-gray-600">
                     <MapPin className="w-4 h-4 mr-2" />
                     <span>{property.location}</span>
@@ -325,8 +325,7 @@ const BookedProperties = () => {
                   <div className="flex items-center text-gray-600">
                     <IndianRupee className="w-4 h-4 mr-2" />
                     <span>
-                      Token Amount:{" "}
-                      {property.tokenAmount ? (
+                      Token Amount: {property.tokenAmount ? (
                         <span className="font-medium">
                           ₹{(Number(property.tokenAmount) / 100).toLocaleString('en-IN')}
                         </span>
@@ -341,12 +340,9 @@ const BookedProperties = () => {
                   <div className="flex items-center text-gray-600">
                     <User className="w-4 h-4 mr-2" />
                     <span>
-                      Booked by:{" "}
-                      {property.bookedBy ? (
+                      Booked by: {property.bookedBy ? (
                         <span className="font-medium text-blue-600">
-                          {property.bookedBy.name ||
-                            property.bookedBy.email ||
-                            "Unknown User"}
+                          {property.bookedBy.name || property.bookedBy.email || "Unknown User"}
                         </span>
                       ) : (
                         <span className="text-yellow-600 bg-yellow-50 px-2 py-0.5 rounded text-xs">
@@ -359,8 +355,7 @@ const BookedProperties = () => {
                   <div className="flex items-center text-gray-600">
                     <Calendar className="w-4 h-4 mr-2" />
                     <span>
-                      Booked on:{" "}
-                      {property.bookingDate ? (
+                      Booked on: {property.bookingDate ? (
                         formatDate(property.bookingDate)
                       ) : (
                         <span className="text-yellow-600 bg-yellow-50 px-2 py-0.5 rounded text-xs">
@@ -385,18 +380,18 @@ const BookedProperties = () => {
                   </div>
                 </div>
 
-                <div className="flex gap-2 mt-4">
+                <div className="flex gap-2 mt-3 sm:mt-4 flex-wrap">
                   {property.isBlocked ? (
                     <button
                       onClick={() => handleUnblockProperty(property._id)}
-                      className="px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm flex items-center"
+                      className="px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-xs sm:text-sm flex items-center"
                     >
                       <UnlockIcon className="w-4 h-4 mr-1" /> Unblock
                     </button>
                   ) : (
                     <button
                       onClick={() => handleBlockProperty(property._id)}
-                      className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm flex items-center"
+                      className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-xs sm:text-sm flex items-center"
                     >
                       <LockIcon className="w-4 h-4 mr-1" /> Block
                     </button>
