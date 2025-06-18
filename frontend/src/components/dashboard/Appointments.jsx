@@ -155,7 +155,7 @@ const Appointments = () => {
 
       // Configure Razorpay options
       const options = {
-        key: "rzp_test_meL58e1NfBNqxd", // Your Razorpay Key ID
+        key: "process.env.RAZORPAY_KEY_ID", // Your Razorpay Key ID
         amount: orderResponse.data.amount,
         currency: orderResponse.data.currency,
         name: "BuildEstate",
