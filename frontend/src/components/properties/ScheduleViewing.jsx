@@ -35,7 +35,9 @@ const ScheduleViewing = ({
     const slots = [];
     for (let hour = 9; hour <= 18; hour++) {
       slots.push(`${hour.toString().padStart(2, "0")}:00`);
-      slots.push(`${hour.toString().padStart(2, "0")}:30`);
+      if (hour < 18) {
+        slots.push(`${hour.toString().padStart(2, "0")}:30`);
+      }
     }
     return slots;
   }, []);
@@ -43,14 +45,19 @@ const ScheduleViewing = ({
   // Calculate date restrictions
   const dateRestrictions = useMemo(() => {
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    // Adjust for timezone offset to get correct local date string
+    const minDate = new Date(today.getTime() - today.getTimezoneOffset() * 60000)
+      .toISOString()
+      .split("T")[0];
     const maxDate = new Date();
     maxDate.setDate(today.getDate() + 30);
-
-    today.setHours(0, 0, 0, 0);
-
+    const maxDateStr = new Date(maxDate.getTime() - maxDate.getTimezoneOffset() * 60000)
+      .toISOString()
+      .split("T")[0];
     return {
-      min: today.toISOString().split("T")[0],
-      max: maxDate.toISOString().split("T")[0],
+      min: minDate,
+      max: maxDateStr,
     };
   }, []);
 
@@ -89,6 +96,14 @@ const ScheduleViewing = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const selectedDate = new Date(formData.date);
+      selectedDate.setHours(0, 0, 0, 0);
+      if (selectedDate < today) {
+        toast.error("You cannot schedule a viewing for a past date.");
+        return;
+      }
       const token = localStorage.getItem("token");
       if (!token) {
         toast.error("Please login to schedule a viewing");

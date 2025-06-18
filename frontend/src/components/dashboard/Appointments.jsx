@@ -155,7 +155,7 @@ const Appointments = () => {
 
       // Configure Razorpay options
       const options = {
-        key: "process.env.RAZORPAY_KEY_ID", // Your Razorpay Key ID
+        key: "rzp_test_meL58e1NfBNqxd",
         amount: orderResponse.data.amount,
         currency: orderResponse.data.currency,
         name: "BuildEstate",
@@ -210,7 +210,7 @@ const Appointments = () => {
     } catch (error) {
       console.error("Error initiating payment:", error);
       toast.error(
-        error.response?.data?.message || "Could not initiate payment"
+        error.response?.data?.message || "Could not initiate payment",{autoClose:2000}
       );
     }
   };
