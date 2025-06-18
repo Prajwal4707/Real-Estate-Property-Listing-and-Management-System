@@ -5,8 +5,8 @@ import Property from "../models/propertymodel.js";
 import transporter from "../config/nodemailer.js";
 
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_meL58e1NfBNqxd",
-  key_secret: process.env.RAZORPAY_KEY_SECRET || "geS94AazUCXTzXRGaEm1fhei",
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
 // Create a new order
