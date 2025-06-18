@@ -112,7 +112,7 @@ const ScheduleViewing = ({
 
       if (response.data.success) {
         setIsSuccess(true);
-        toast.success("Viewing scheduled successfully");
+        toast.success("Viewing scheduled successfully", { autoClose: 2000 });
         setTimeout(() => {
           onClose();
         }, 3000);
@@ -131,7 +131,7 @@ const ScheduleViewing = ({
         }
       }
 
-      toast.error(errorMessage);
+      toast.error(errorMessage, { autoClose: 2000 });
     } finally {
       setLoading(false);
     }

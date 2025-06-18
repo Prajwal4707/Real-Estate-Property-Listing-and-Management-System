@@ -127,7 +127,7 @@ const AnalysisDisplay = ({ analysis }) => {
       <div className="flex justify-between items-center mb-3 sm:mb-4 pb-2 border-b border-gray-200">
         <h2 className="text-lg sm:text-xl font-semibold text-gray-800 flex items-center">
           <Info className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2 flex-shrink-0 text-blue-600" />
-          <span className="truncate">Expert Analysis</span>
+          <span className="truncate">AI Analysis</span>
         </h2>
         <button 
           onClick={() => setExpanded(!expanded)} 

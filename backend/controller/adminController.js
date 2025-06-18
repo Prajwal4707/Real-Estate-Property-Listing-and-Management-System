@@ -1,4 +1,3 @@
-import Stats from "../models/statsModel.js";
 import Property from "../models/propertymodel.js";
 import Appointment from "../models/appointmentModel.js";
 import User from "../models/Usermodel.js";
@@ -34,13 +33,15 @@ export const getAdminStats = async (req, res) => {
       pendingAppointments,
       recentActivity,
       viewsData,
+      totalPropertyViews,
     ] = await Promise.all([
       Property.countDocuments(),
-      Property.countDocuments({ status: "active" }),
+      Property.countDocuments({ isBlocked: false, isBooked: false }),
       User.countDocuments(),
       Appointment.countDocuments({ status: "pending" }),
       getRecentActivity(),
       getViewsData(),
+      Property.aggregate([{ $group: { _id: null, total: { $sum: "$views" } } }]).then(res => res[0]?.total || 0),
     ]);
 
     res.json({
@@ -52,6 +53,7 @@ export const getAdminStats = async (req, res) => {
         pendingAppointments,
         recentActivity,
         viewsData,
+        totalViews: totalPropertyViews,
       },
     });
   } catch (error) {
@@ -96,26 +98,22 @@ const getViewsData = async () => {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-    const stats = await Stats.aggregate([
-      {
-        $match: {
-          endpoint: /^\/api\/products\/single\//,
-          method: "GET",
-          timestamp: { $gte: thirtyDaysAgo },
-        },
-      },
-      {
-        $group: {
-          _id: {
-            $dateToString: { format: "%Y-%m-%d", date: "$timestamp" },
-          },
-          count: { $sum: 1 },
-        },
-      },
-      { $sort: { _id: 1 } },
-    ]);
+    const propertiesWithViewDates = await Property.find({
+      "viewDates": { $gte: thirtyDaysAgo }
+    }).select('viewDates');
 
-    // Generate dates for last 30 days
+    const dailyViews = {};
+
+    propertiesWithViewDates.forEach(property => {
+      property.viewDates.forEach(viewDate => {
+        if (new Date(viewDate) >= thirtyDaysAgo) {
+          const dateString = new Date(viewDate).toISOString().split('T')[0];
+          dailyViews[dateString] = (dailyViews[dateString] || 0) + 1;
+        }
+      });
+    });
+
+    // Generate dates for last 30 days and populate data
     const labels = [];
     const data = [];
     for (let i = 30; i >= 0; i--) {
@@ -123,9 +121,7 @@ const getViewsData = async () => {
       date.setDate(date.getDate() - i);
       const dateString = date.toISOString().split("T")[0];
       labels.push(dateString);
-
-      const stat = stats.find((s) => s._id === dateString);
-      data.push(stat ? stat.count : 0);
+      data.push(dailyViews[dateString] || 0);
     }
 
     return {
@@ -219,6 +215,24 @@ export const updateAppointmentStatus = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Error updating appointment",
+    });
+  }
+};
+
+export const resetPropertyViews = async (req, res) => {
+  try {
+    // Reset the 'views' field and clear 'viewDates' array for all properties
+    const updateResult = await Property.updateMany({}, { $set: { views: 0, viewDates: [] } });
+
+    res.json({
+      success: true,
+      message: `Successfully reset views for ${updateResult.modifiedCount} properties.`, 
+    });
+  } catch (error) {
+    console.error("Error resetting property views:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to reset property views",
     });
   }
 };

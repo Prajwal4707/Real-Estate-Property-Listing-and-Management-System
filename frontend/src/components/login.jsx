@@ -37,8 +37,8 @@ const Login = () => {
       );
       if (response.data.success) {
         await login(response.data.token, response.data.user);
-        toast.success("Login successful!");
-        navigate("/dashboard");
+        toast.success("Login successful!", { autoClose: 2000 });
+        navigate("/");
       } else {
         toast.error(response.data.message);
       }

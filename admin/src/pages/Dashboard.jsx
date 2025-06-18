@@ -21,6 +21,7 @@ import {
   Eye,
   AlertCircle,
   Loader,
+  RefreshCcw
 } from "lucide-react";
 import { backendurl } from "../App";
 
@@ -119,6 +120,27 @@ const Dashboard = () => {
         error: error.message || "Failed to fetch dashboard data",
       }));
       console.error("Error fetching stats:", error);
+    }
+  };
+
+  const handleResetViews = async () => {
+    if (window.confirm("Are you sure you want to reset all property views? This action cannot be undone.")) {
+      try {
+        const response = await axios.post(
+          `${backendurl}/api/admin/reset-views`,
+          {},
+          { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        );
+        if (response.data.success) {
+          alert(response.data.message);
+          fetchStats(); // Refresh stats after resetting views
+        } else {
+          alert(response.data.message || "Failed to reset property views.");
+        }
+      } catch (error) {
+        console.error("Error resetting property views:", error);
+        alert(error.response?.data?.message || "An error occurred while resetting views.");
+      }
     }
   };
 
@@ -255,8 +277,15 @@ const Dashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             className="bg-white p-6 rounded-lg shadow-lg"
           >
-            <h2 className="text-xl font-bold text-gray-900 mb-6">
-              Property Views
+            <h2 className="text-xl font-bold text-gray-900 mb-6 flex justify-between items-center">
+              <span>Property Views</span>
+              <button
+                onClick={handleResetViews}
+                className="px-3 py-1 bg-red-500 text-white rounded-md text-sm hover:bg-red-600 transition-colors flex items-center gap-1"
+              >
+                <RefreshCcw className="w-3 h-3" />
+                Reset Views
+              </button>
             </h2>
             <div className="h-[400px]">
               {stats.viewsData && Object.keys(stats.viewsData).length > 0 ? (

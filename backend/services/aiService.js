@@ -1,28 +1,28 @@
 import { config } from "../config/config.js";
-import ModelClient, { isUnexpected } from "@azure-rest/ai-inference";
-import { AzureKeyCredential } from "@azure/core-auth";
 
 class AIService {
   constructor() {
-    this.azureApiKey = config.azureApiKey;
+    this.openRouterApiKey = config.openRouterApiKey;
+    this.openRouterBaseURL = "https://openrouter.ai/api/v1";
   }
 
   async generateText(prompt) {
-    return this.generateTextWithAzure(prompt);
+    return this.generateTextWithOpenRouter(prompt);
   }
 
-  async generateTextWithAzure(prompt) {
+  async generateTextWithOpenRouter(prompt) {
     try {
-      console.log(`Starting Azure AI generation at ${new Date().toISOString()}`);
+      console.log(`Starting OpenRouter AI generation at ${new Date().toISOString()}`);
       const startTime = Date.now();
       
-      const client = ModelClient(
-        "https://models.inference.ai.azure.com",
-        new AzureKeyCredential(this.azureApiKey)
-      );
-
-      const response = await client.path("/chat/completions").post({
-        body: {
+      const response = await fetch(`${this.openRouterBaseURL}/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.openRouterApiKey}`
+        },
+        body: JSON.stringify({
+          model: "openai/gpt-3.5-turbo", // You can change to another model if desired
           messages: [
             { 
               role: "system", 
@@ -33,23 +33,24 @@ class AIService {
               content: prompt 
             }
           ],
-          model: "gpt-4o",
           temperature: 0.7,
           max_tokens: 800,
           top_p: 1
-        }
+        })
       });
 
       const endTime = Date.now();
-      console.log(`Azure AI generation completed in ${(endTime - startTime) / 1000} seconds`);
+      console.log(`OpenRouter AI generation completed in ${(endTime - startTime) / 1000} seconds`);
 
-      if (isUnexpected(response)) {
-        throw new Error(response.body.error.message || "Azure API error");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error?.message || `OpenRouter API error: ${response.status}`);
       }
       
-      return response.body.choices[0].message.content;
+      const data = await response.json();
+      return data.choices[0].message.content;
     } catch (error) {
-      console.error("Error generating text with Azure:", error);
+      console.error("Error generating text with OpenRouter:", error);
       return `Error: ${error.message}`;
     }
   }

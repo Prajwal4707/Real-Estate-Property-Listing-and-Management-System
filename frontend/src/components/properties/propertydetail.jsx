@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
@@ -30,9 +30,12 @@ const PropertyDetails = () => {
   const [activeImage, setActiveImage] = useState(0);
   const [copySuccess, setCopySuccess] = useState(false);
   const navigate = useNavigate();
+  const fetched = useRef(false);
 
   useEffect(() => {
     const fetchProperty = async () => {
+      if (fetched.current) return;
+      fetched.current = true;
       try {
         setLoading(true);
         const response = await axios.get(

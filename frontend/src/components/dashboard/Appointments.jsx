@@ -21,8 +21,10 @@ const Appointments = () => {
   const [filter, setFilter] = useState("upcoming");
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchAppointments();
-  }, []);
+  }, [filter]);
+
   const fetchAppointments = async () => {
     try {
       setLoading(true);
@@ -33,20 +35,17 @@ const Appointments = () => {
         return;
       }
 
-      const response = await axios.get(`${Backendurl}/api/appointments/user`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        `${Backendurl}/api/appointments/user?filter=${filter}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       if (response.data.success) {
-        // Filter out appointments with missing or invalid data
         const validAppointments = response.data.appointments.filter(
           (apt) => apt && apt.propertyId && apt.propertyId.title
         );
-
-        if (validAppointments.length < response.data.appointments.length) {
-          console.warn("Some appointments have missing or invalid data");
-        }
-
         setAppointments(validAppointments);
       } else {
         toast.error(response.data.message || "Failed to fetch appointments");
@@ -65,6 +64,7 @@ const Appointments = () => {
       setLoading(false);
     }
   };
+
   const handleMeetingJoin = async (appointmentId) => {
     try {
       const token = localStorage.getItem("token");
@@ -97,16 +97,17 @@ const Appointments = () => {
       );
 
       if (response.data.success) {
-        toast.success("Appointment cancelled successfully");
+        toast.success("Appointment cancelled successfully",{autoClose:2000});
         fetchAppointments();
       } else {
-        toast.error(response.data.message || "Failed to cancel appointment");
+        toast.error(response.data.message || "Failed to cancel appointment",{autoClose:2000});
       }
     } catch (error) {
       console.error("Error cancelling appointment:", error);
       toast.error("Failed to cancel appointment");
     }
   };
+
   const handleMarkAsVisited = async (appointmentId) => {
     try {
       const token = localStorage.getItem("token");
@@ -116,10 +117,10 @@ const Appointments = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.data.success) {
-        toast.success("Appointment marked as visited.");
+        toast.success("Appointment marked as visited.",{autoClose:2000});
         fetchAppointments();
       } else {
-        toast.error(response.data.message || "Failed to mark as visited");
+        toast.error(response.data.message || "Failed to mark as visited",{autoClose:2000});
       }
     } catch (error) {
       console.error("Error marking appointment as visited:", error);
@@ -131,6 +132,7 @@ const Appointments = () => {
       await fetchAppointments(); // Still refresh to ensure UI is in sync with backend
     }
   };
+
   const handleTokenPayment = async (appointmentId) => {
     try {
       const token = localStorage.getItem("token");
@@ -174,17 +176,17 @@ const Appointments = () => {
             );
 
             if (verifyResponse.data.success) {
-              toast.success("Payment successful!");
+              toast.success("Payment successful!",{autoClose:2000});
               fetchAppointments();
             } else {
               toast.error(
-                verifyResponse.data.message || "Payment verification failed"
+                verifyResponse.data.message || "Payment verification failed",{autoClose:2000}
               );
             }
           } catch (error) {
             console.error("Payment verification failed:", error);
             toast.error(
-              error.response?.data?.message || "Payment verification failed"
+              error.response?.data?.message || "Payment verification failed",{autoClose:2000}
             );
           }
         },
@@ -243,36 +245,10 @@ const Appointments = () => {
       maximumFractionDigits: 0,
     }).format(amount);
   };
-  const filteredAppointments = appointments.filter((appointment) => {
-    // First check if the appointment is valid
-    if (
-      !appointment ||
-      !appointment.propertyId ||
-      !appointment.date ||
-      !appointment.status
-    ) {
-      return false;
-    }
 
-    const now = new Date();
-    if (filter === "upcoming") {
-      return (
-        // Pending or confirmed appointments in the future
-        (["pending", "confirmed"].includes(appointment.status) &&
-          new Date(appointment.date) >= now) || // Past completed appointments
-        (appointment.status === "confirmed" && appointment.visited)
-      );
-    } else if (filter === "past") {
-      return (
-        // Cancelled appointments
-        appointment.status === "cancelled" ||
-        // Completed appointments
-        appointment.status === "completed" ||
-        // Past appointments not visited yet
-        (new Date(appointment.date) < now && !appointment.visited)
-      );
-    }
-    return true;
+  // Only filter out truly invalid appointments
+  const filteredAppointments = appointments.filter((appointment) => {
+    return appointment && appointment.propertyId && appointment.date && appointment.status;
   });
 
   if (loading) {

@@ -440,39 +440,61 @@ export const getAppointmentsByUser = async (req, res) => {
   try {
     const { filter } = req.query;
     let query = { userId: req.user._id };
+    const now = new Date();
+    const fortyEightHoursAgo = new Date(now.getTime() - 48 * 60 * 60 * 1000);
 
-    // Apply filtering logic
     if (filter === "upcoming") {
       query = {
         ...query,
-        $or: [
-          // Pending or confirmed appointments that haven't happened yet
+        $and: [
+          { status: { $nin: ["cancelled"] } },
           {
-            status: { $in: ["pending", "confirmed"] },
-            date: { $gte: new Date() },
-          },
-          // Confirmed and visited appointments that need payment
-          {
-            status: "confirmed",
-            visited: true,
-            "payment.status": { $ne: "paid" },
-          },
-        ],
+            $or: [
+              // Not visited and date is in the future or within last 48 hours
+              {
+                visited: { $ne: true },
+                date: { $gte: fortyEightHoursAgo }
+              },
+              // Visited but payment not completed and within 48 hours
+              {
+                visited: true,
+                $or: [
+                  { "payment.status": { $ne: "completed" } },
+                  { payment: { $exists: false } }
+                ],
+                date: { $gte: fortyEightHoursAgo }
+              },
+              // Visited and payment completed and date is in the future
+              {
+                visited: true,
+                "payment.status": "completed",
+                date: { $gte: now }
+              }
+            ]
+          }
+        ]
       };
     } else if (filter === "past") {
       query = {
         ...query,
         $or: [
-          // Completed appointments
-          { status: "completed" },
-          // Cancelled appointments
-          { status: "cancelled" },
-          // Past appointments that were paid
+          // Not visited and date is more than 48 hours ago
           {
-            date: { $lt: new Date() },
-            "payment.status": "paid",
+            visited: { $ne: true },
+            date: { $lt: fortyEightHoursAgo }
           },
-        ],
+          // Visited but payment not completed and date is more than 48 hours ago
+          {
+            visited: true,
+            $or: [
+              { "payment.status": { $ne: "completed" } },
+              { payment: { $exists: false } }
+            ],
+            date: { $lt: fortyEightHoursAgo }
+          },
+          // Cancelled appointments
+          { status: "cancelled" }
+        ]
       };
     }
     const appointments = await Appointment.find(query)

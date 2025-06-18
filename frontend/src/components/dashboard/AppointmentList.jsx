@@ -17,6 +17,8 @@ const AppointmentList = () => {
   const [filter, setFilter] = useState("upcoming");
 
   useEffect(() => {
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0);
     fetchAppointments();
   }, [filter]);
 
@@ -59,13 +61,13 @@ const AppointmentList = () => {
       );
 
       if (response.data.success) {
-        toast.success("Appointment marked as visited");
+        toast.success("Appointment marked as visited",{autoClose:2000});
         fetchAppointments();
       }
     } catch (error) {
       console.error("Error marking appointment as visited:", error);
       toast.error(
-        error.response?.data?.message || "Failed to mark appointment as visited"
+        error.response?.data?.message || "Failed to mark appointment as visited",{autoClose:2000}
       );
     }
   };

@@ -247,25 +247,19 @@ const updateproperty = async (req, res) => {
 const singleproperty = async (req, res) => {
   try {
     const property = await Property.findById(req.params.id);
-    
+
     if (!property) {
-      return res.status(404).json({ 
-        message: "Property not found", 
-        success: false 
-      });
+      return res.status(404).json({ message: "Property not found", success: false });
     }
 
-    // Check if property is blocked
-    if (property.isBlocked) {
-      return res.status(403).json({ 
-        message: "This property is not available", 
-        success: false 
-      });
-    }
+    // Increment views and add current date to viewDates
+    property.views += 1;
+    property.viewDates.push(new Date());
+    await property.save();
 
     res.json({ property, success: true });
   } catch (error) {
-    console.log("Error getting single property: ", error);
+    console.log("Error fetching single product: ", error);
     res.status(500).json({ message: "Server Error", success: false });
   }
 };

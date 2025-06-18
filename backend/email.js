@@ -15,21 +15,25 @@ export const getSchedulingEmailTemplate = (appointment, date, time, notes) => `
           <strong>Property:</strong> ${appointment.propertyId.title}
         </p>
         <p style="margin: 8px 0; color: #374151;">
-          <strong>Date:</strong> ${new Date(date).toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
+          <strong>Date:</strong> ${new Date(date).toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
           })}
         </p>
         <p style="margin: 8px 0; color: #374151;">
           <strong>Time:</strong> ${time}
         </p>
-        ${notes ? `
+        ${
+          notes
+            ? `
         <p style="margin: 8px 0; color: #374151;">
           <strong>Notes:</strong> ${notes}
         </p>
-        ` : ''}
+        `
+            : ""
+        }
         <p style="margin: 8px 0; color: #374151;">
           <strong>Status:</strong> <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 14px; background: #fef3c7; color: #854d0e;">Pending</span>
         </p>
@@ -73,12 +77,13 @@ export const getSchedulingEmailTemplate = (appointment, date, time, notes) => `
   </div>
 `;
 
-
 export const getEmailTemplate = (appointment, status) => `
   <div style="max-width: 600px; margin: 20px auto; font-family: 'Arial', sans-serif; line-height: 1.6;">
     <!-- Header with Background -->
     <div style="background: linear-gradient(135deg, #2563eb, #1e40af); padding: 40px 20px; border-radius: 15px 15px 0 0; text-align: center;">
-      <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">Appointment ${status.charAt(0).toUpperCase() + status.slice(1)}</h1>
+      <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">Appointment ${
+        status.charAt(0).toUpperCase() + status.slice(1)
+      }</h1>
       <p style="color: #ffffff; opacity: 0.9; margin: 10px 0 0 0; font-size: 16px;">BuildEstate Property Viewing</p>
     </div>
 
@@ -91,11 +96,13 @@ export const getEmailTemplate = (appointment, status) => `
           <strong>Property:</strong> ${appointment.propertyId.title}
         </p>
         <p style="margin: 8px 0; color: #374151;">
-          <strong>Date:</strong> ${new Date(appointment.date).toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
+          <strong>Date:</strong> ${new Date(
+            appointment.date
+          ).toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
           })}
         </p>
         <p style="margin: 8px 0; color: #374151;">
@@ -103,10 +110,18 @@ export const getEmailTemplate = (appointment, status) => `
         </p>
         <p style="margin: 8px 0; color: #374151;">
           <strong>Status:</strong> <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 14px; background: ${
-            status === 'confirmed' ? '#dcfce7' : status === 'cancelled' ? '#fee2e2' : '#fef3c7'
+            status === "confirmed"
+              ? "#dcfce7"
+              : status === "cancelled"
+              ? "#fee2e2"
+              : "#fef3c7"
           }; color: ${
-            status === 'confirmed' ? '#166534' : status === 'cancelled' ? '#991b1b' : '#854d0e'
-          };">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+  status === "confirmed"
+    ? "#166534"
+    : status === "cancelled"
+    ? "#991b1b"
+    : "#854d0e"
+};">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
         </p>
       </div>
 
@@ -114,7 +129,9 @@ export const getEmailTemplate = (appointment, status) => `
       <div style="margin-top: 30px;">
         <h3 style="color: #1e40af; margin: 0 0 15px 0; font-size: 18px;">What's Next?</h3>
         <ul style="list-style: none; padding: 0; margin: 0;">
-          ${status === 'confirmed' ? `
+          ${
+            status === "confirmed"
+              ? `
             <li style="margin-bottom: 10px; display: flex; align-items: center;">
               <span style="display: inline-block; width: 24px; height: 24px; background: #dcfce7; border-radius: 50%; margin-right: 10px; text-align: center; line-height: 24px; color: #166534;">✓</span>
               Arrive 10 minutes before your scheduled time
@@ -123,17 +140,21 @@ export const getEmailTemplate = (appointment, status) => `
               <span style="display: inline-block; width: 24px; height: 24px; background: #dcfce7; border-radius: 50%; margin-right: 10px; text-align: center; line-height: 24px; color: #166534;">✓</span>
               Bring valid identification
             </li>
-          ` : status === 'cancelled' ? `
+          `
+              : status === "cancelled"
+              ? `
             <li style="margin-bottom: 10px; display: flex; align-items: center;">
               <span style="display: inline-block; width: 24px; height: 24px; background: #fee2e2; border-radius: 50%; margin-right: 10px; text-align: center; line-height: 24px; color: #991b1b;">i</span>
               You can schedule another viewing at any time
             </li>
-          ` : `
+          `
+              : `
             <li style="margin-bottom: 10px; display: flex; align-items: center;">
               <span style="display: inline-block; width: 24px; height: 24px; background: #fef3c7; border-radius: 50%; margin-right: 10px; text-align: center; line-height: 24px; color: #854d0e;">!</span>
               We will confirm your appointment shortly
             </li>
-          `}
+          `
+          }
         </ul>
       </div>
 
@@ -145,7 +166,7 @@ export const getEmailTemplate = (appointment, status) => `
           <br>
           📧 <a href="mailto:support@buildestate.com" style="color: #2563eb; text-decoration: none;">support@buildestate.com</a>
           <br>
-          📞 <a href="tel:+1234567890" style="color: #2563eb; text-decoration: none;">+1 (234) 567-890</a>
+          📞 <a href="tel:+1234567890" style="color: #2563eb; text-decoration: none;">+91 9876543210</a>
         </p>
       </div>
     </div>
@@ -303,7 +324,7 @@ export const getWelcomeTemplate = (name) => `
         <br>
         📧 <a href="mailto:support@buildestate.com" style="color: #2563eb; text-decoration: none;">support@buildestate.com</a>
         <br>
-        📞 <a href="tel:+1234567890" style="color: #2563eb; text-decoration: none;">+1 (234) 567-890</a>
+        📞 <a href="tel:+1234567890" style="color: #2563eb; text-decoration: none;">+91 9876543210</a>
       </p>
     </div>
   </div>
@@ -381,7 +402,7 @@ export const getPasswordResetTemplate = (resetUrl) => `
           <br>
           📧 <a href="mailto:security@buildestate.com" style="color: #2563eb; text-decoration: none;">security@buildestate.com</a>
           <br>
-          📞 <a href="tel:+1234567890" style="color: #2563eb; text-decoration: none;">+1 (234) 567-890</a>
+          📞 <a href="tel:+1234567890" style="color: #2563eb; text-decoration: none;">+91 9876543210</a>
         </p>
       </div>
     </div>

@@ -78,6 +78,12 @@ const propertySchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    viewDates: [
+      {
+        type: Date,
+        default: Date.now,
+      },
+    ],
   },
   { timestamps: true }
 );
