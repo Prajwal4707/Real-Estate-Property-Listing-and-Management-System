@@ -41,22 +41,43 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(trackAPIStats);
 
-// CORS Configuration
+const allowedOrigins = [
+  "http://localhost:4000",
+  "http://localhost:5174",
+  "http://localhost:5173",
+  "https://buildestate-frontend.vercel.app",
+  "https://buildestate-admin18.vercel.app",
+  "https://real-estate-management-xhqz.onrender.com"
+];
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:4000",
-      "http://localhost:5174",
-      "http://localhost:5173",
-      "https://buildestate.vercel.app",
-      "https://real-estate-website-admin.onrender.com",
-      "https://real-estate-website-backend-zfu7.onrender.com",
-    ],
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"], // Added HEAD
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   })
 );
+
+// Explicitly handle preflight OPTIONS requests for all routes with the same config
+app.options("*", cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+}));
 
 // Database connection
 connectdb()

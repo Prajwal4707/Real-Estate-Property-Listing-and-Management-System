@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const StructuredData = ({ type, data }) => {
   const location = useLocation();
-  const currentUrl = `https://buildestate.vercel.app${location.pathname}`;
+  const currentUrl = `https://buildestate-frontend.vercel.app/${location.pathname}`;
 
   // Different schema types based on page content
   const schemas = {
@@ -11,7 +11,7 @@ const StructuredData = ({ type, data }) => {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       name: 'BuildEstate',
-      url: 'https://buildestate.vercel.app',
+      url: 'https://buildestate-frontend.vercel.app/',
       potentialAction: {
         '@type': 'SearchAction',
         target: '{search_term_string}',
@@ -22,8 +22,8 @@ const StructuredData = ({ type, data }) => {
       '@context': 'https://schema.org',
       '@type': 'Organization',
       name: 'BuildEstate',
-      url: 'https://buildestate.vercel.app',
-      logo: 'https://buildestate.vercel.app/logo.png',
+      url: 'https://buildestate-frontend.vercel.app/',
+      logo: 'https://buildestate-frontend.vercel.app//logo.png',
       sameAs: [
         'https://github.com/AAYUSH412/Real-Estate-Website',
         'https://linkedin.com/in/AAYUSH412'
@@ -57,7 +57,7 @@ const StructuredData = ({ type, data }) => {
       name: 'AI Property Hub',
       applicationCategory: 'RealEstateApplication',
       description: 'AI-powered real estate analytics and recommendations tool',
-      url: 'https://buildestate.vercel.app/ai-property-hub',
+      url: 'https://buildestate-frontend.vercel.app//ai-property-hub',
       offers: {
         '@type': 'Offer',
         price: '0',
