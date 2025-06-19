@@ -16,7 +16,7 @@ const createAdminUser = async () => {
     const adminData = {
       name: "Admin",
       email: "admin@buildestate.com",
-      password: "admin123", // You should change this in production
+      password: process.env.ADMIN_PASSWORD,
       isAdmin: true,
     };
 
