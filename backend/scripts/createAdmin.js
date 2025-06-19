@@ -8,7 +8,7 @@ dotenv.config();
 const createAdminUser = async () => {
   try {
     // Connect to MongoDB using your connection string
-    const MONGODB_URI ="mongodb+srv://Prajwal18:Prajwal4707@cluster0.umfpypu.mongodb.net/Real-Estate-Website?retryWrites=true&w=majority";
+    const MONGODB_URI ="mongodb+srv://<username>:<db_password>@cluster0.umfpypu.mongodb.net/<db_name>?retryWrites=true&w=majority";
     await mongoose.connect(MONGODB_URI);
     console.log("Connected to MongoDB");
 
