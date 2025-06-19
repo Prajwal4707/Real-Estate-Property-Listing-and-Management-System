@@ -19,28 +19,6 @@ dotenv.config();
 
 const app = express();
 
-// Rate limiting to prevent abuse
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 500, // Limit each IP to 500 requests per window
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-  message: {
-    success: false,
-    message: "Too many requests, please try again later.",
-  },
-});
-
-// Security middlewares
-app.use(limiter);
-app.use(helmet());
-app.use(compression());
-
-// Middleware
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-app.use(trackAPIStats);
-
 const allowedOrigins = [
   "http://localhost:4000",
   "http://localhost:5174",
@@ -50,6 +28,7 @@ const allowedOrigins = [
   "https://real-estate-management-xhqz.onrender.com"
 ];
 
+// CORS Middleware FIRST
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -78,6 +57,37 @@ app.options("*", cors({
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
 }));
+
+// CORS error handler
+app.use((err, req, res, next) => {
+  if (err.message === "Not allowed by CORS") {
+    res.status(403).json({ success: false, message: "CORS Error: Origin not allowed" });
+  } else {
+    next(err);
+  }
+});
+
+// Rate limiting to prevent abuse
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 500, // Limit each IP to 500 requests per window
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  message: {
+    success: false,
+    message: "Too many requests, please try again later.",
+  },
+});
+
+// Security middlewares
+app.use(limiter);
+app.use(helmet());
+app.use(compression());
+
+// Middleware
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+app.use(trackAPIStats);
 
 // Database connection
 connectdb()
