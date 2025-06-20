@@ -181,7 +181,7 @@ VITE_API_URL=http://localhost:4000
 
 ## License
 
-The Project is licensed under MIT.Check here- LICENSE
+The Project is licensed under MIT. Check here-[LICENSE]
 
 ---
 ## Contact
