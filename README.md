@@ -180,6 +180,9 @@ VITE_API_URL=http://localhost:4000
 
 ---
 
+##License
+Check it out here LICENSE
+
 ## Contact
 
 For questions or support, open an issue or contact allayyanavarprajwal@gmail.com
