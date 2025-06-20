@@ -33,6 +33,36 @@ A full-stack web application for listing, booking, and managing real estate prop
 
 ## Project Structure
 
+Real-Estate-Website/
+│
+├── admin/                # Admin dashboard (React app for admin users)
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   └── ... (other config files)
+│
+├── backend/              # Backend API (Node.js/Express)
+│   ├── src/
+│   ├── models/
+│   ├── routes/
+│   ├── controller/
+│   ├── scripts/
+│   ├── config/
+│   ├── middleware/
+│   ├── uploads/
+│   ├── package.json
+│   └── ... (other config files)
+│
+├── frontend/             # Main user-facing frontend (React app)
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   └── ... (other config files)
+│
+├── README.md             # Project documentation
+├── package.json          # (optional, for monorepo tools)
+└── ... (other root files)
+
 ---
 
 ## Environments & Requirements
