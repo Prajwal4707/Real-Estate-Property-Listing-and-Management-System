@@ -24,10 +24,17 @@ const createAdminUser = async () => {
     const existingAdmin = await User.findOne({ email: adminData.email });
     if (existingAdmin) {
       console.log("Admin user already exists");
+      let updated = false;
       if (!existingAdmin.isAdmin) {
         existingAdmin.isAdmin = true;
-        await existingAdmin.save();
-        console.log("Updated existing user to admin");
+        updated = true;
+      }
+      // Always update the password
+      existingAdmin.password = await bcrypt.hash(adminData.password, 10);
+      updated = true;
+      await existingAdmin.save();
+      if (updated) {
+        console.log("Updated existing admin user (password and/or isAdmin flag)");
       }
     } else {
       // Hash the password
