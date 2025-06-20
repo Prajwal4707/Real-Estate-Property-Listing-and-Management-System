@@ -30,9 +30,9 @@ A full-stack web application for listing, booking, and managing real estate prop
 - Admin dashboard for managing users, properties, and bookings
 
 ---
-
 ## Project Structure
->>>>>>> afe9ad7 (Updated Readme.md)
+
+```plaintext
 Real-Estate-Website/
 │
 ├── admin/                # Admin dashboard (React app for admin users)
@@ -62,6 +62,10 @@ Real-Estate-Website/
 ├── README.md             # Project documentation
 ├── package.json          # (optional, for monorepo tools)
 └── ... (other root files)
+```
+```
+
+---
 
 ---
 
