@@ -177,12 +177,13 @@ VITE_API_URL=http://localhost:4000
 - `npm run build` — Build for production
 - `npm start` — Start production server (backend)
 - `node scripts/createAdmin.js` — Create or update admin user
-
 ---
 
-##License
-Check it out here LICENSE
+## License
 
+The Project is licensed under MIT.Check here-(LICENSE)
+
+---
 ## Contact
 
 For questions or support, open an issue or contact allayyanavarprajwal@gmail.com
