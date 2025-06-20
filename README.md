@@ -63,7 +63,6 @@ Real-Estate-Website/
 ├── package.json          # (optional, for monorepo tools)
 └── ... (other root files)
 ```
-```
 
 ---
 
