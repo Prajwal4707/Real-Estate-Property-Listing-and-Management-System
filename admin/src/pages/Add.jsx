@@ -42,7 +42,6 @@ const PropertyForm = () => {
 
   const [previewUrls, setPreviewUrls] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [newAmenity, setNewAmenity] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -82,16 +81,6 @@ const PropertyForm = () => {
       ...prev,
       images: prev.images.filter((_, i) => i !== index),
     }));
-  };
-
-  const handleAddAmenity = () => {
-    if (newAmenity && !formData.amenities.includes(newAmenity)) {
-      setFormData((prev) => ({
-        ...prev,
-        amenities: [...prev.amenities, newAmenity],
-      }));
-      setNewAmenity("");
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -381,8 +370,8 @@ const PropertyForm = () => {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Amenities
             </label>
-            <div className="flex flex-wrap gap-2">
-              {formData.amenities.map((amenity, index) => (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {AMENITIES.map((amenity, index) => (
                 <div key={index} className="flex items-center">
                   <input
                     type="checkbox"
@@ -401,22 +390,6 @@ const PropertyForm = () => {
                   </label>
                 </div>
               ))}
-            </div>
-            <div className="mt-4 flex items-center">
-              <input
-                type="text"
-                value={newAmenity}
-                onChange={(e) => setNewAmenity(e.target.value)}
-                placeholder="Add new amenity"
-                className="mt-1 block w-full rounded-md border border-gray-100 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
-              <button
-                type="button"
-                onClick={handleAddAmenity}
-                className="ml-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
-              >
-                Add
-              </button>
             </div>
           </div>
 

@@ -146,7 +146,7 @@ const seedProperties = async () => {
       },
       {
         title: "Premium Flat in Indiranagar",
-        location: "Bangalore, India",
+        location: "Bengaluru, India",
         price: 6000000, // 60 Lakhs
         image: [
           "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?ixlib=rb-4.0.3",
@@ -170,7 +170,7 @@ const seedProperties = async () => {
       },
       {
         title: "Luxury Penthouse in Whitefield",
-        location: "Bangalore, India",
+        location: "Bengaluru, India",
         price: 35000000, // 3.5 Crores
         image: [
           "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?ixlib=rb-4.0.3",
@@ -195,7 +195,7 @@ const seedProperties = async () => {
       },
       {
         title: "Garden Villa in Koramangala",
-        location: "Bangalore, India",
+        location: "Bengaluru, India",
         price: 5000000, // 50 Lakhs
         image: [
           "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
@@ -220,7 +220,7 @@ const seedProperties = async () => {
       },
       {
         title: "Premium Apartment in HSR Layout",
-        location: "Bangalore, India",
+        location: "Bengaluru, India",
         price: 7500000, // 75 Lakhs
         image: [
           "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267",

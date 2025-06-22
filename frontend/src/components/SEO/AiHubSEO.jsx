@@ -5,7 +5,7 @@ const AiHubSEO = () => {
     <Helmet>
       <title>AI Property Hub | BuildEstate - Market Trends & Property Analysis</title>
       <meta name="description" content="Use BuildEstate's AI Property Hub to analyze real estate trends, compare property values, and get location-specific investment insights powered by advanced AI." />
-      <meta name="keywords" content="AI property analysis, real estate trends, property investment, rental yield, location trends, property appreciation, Mumbai real estate data, Delhi property market, Bangalore housing trends" />
+      <meta name="keywords" content="AI property analysis, real estate trends, property investment, rental yield, location trends, property appreciation, Mumbai real estate data, Delhi property market, Bengaluru housing trends" />
       
       {/* Enhanced social sharing */}
       <meta property="og:title" content="AI Property Hub | BuildEstate" />

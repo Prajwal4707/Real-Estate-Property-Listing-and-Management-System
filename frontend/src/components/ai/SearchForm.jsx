@@ -26,7 +26,7 @@ const SearchForm = ({ onSearch, isLoading }) => {
     onSearch(searchParams);
   };
 
-  const popularCities = ['Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Pune', 'Chennai'];
+  const popularCities = ['Mumbai', 'Delhi', 'Bengaluru', 'Hyderabad', 'Pune', 'Chennai'];
 
   const handleCitySelect = (city) => {
     setSearchParams(prev => ({

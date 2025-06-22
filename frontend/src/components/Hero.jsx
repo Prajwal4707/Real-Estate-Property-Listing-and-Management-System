@@ -9,7 +9,7 @@ import { RadialGradient } from "react-text-gradients";
 const popularLocations = [
   "Mumbai",
   "Delhi",
-  "Bangalore",
+  "Bengaluru",
   "Hyderabad",
   "Chennai"
 ];

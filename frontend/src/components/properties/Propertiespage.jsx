@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { Grid, List, SlidersHorizontal, MapPin, Home } from "lucide-react";
@@ -8,6 +9,9 @@ import PropertyCard from "./Propertycard.jsx";
 import { Backendurl } from "../../App.jsx";
 
 const PropertiesPage = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [viewState, setViewState] = useState({
     isGridView: true,
     showFilters: false,
@@ -30,6 +34,14 @@ const PropertiesPage = () => {
     searchQuery: "",
     sortBy: "",
   });
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const locationQuery = params.get("location");
+    if (locationQuery) {
+      setFilters((prev) => ({ ...prev, searchQuery: locationQuery }));
+    }
+  }, [location.search]);
 
   const fetchProperties = async () => {
     try {
@@ -120,6 +132,14 @@ const PropertiesPage = () => {
       ...prev,
       ...newFilters,
     }));
+
+    const params = new URLSearchParams(location.search);
+    if (newFilters.searchQuery) {
+      params.set("location", newFilters.searchQuery);
+    } else {
+      params.delete("location");
+    }
+    navigate(`?${params.toString()}`, { replace: true });
   };
 
   if (propertyState.loading) {

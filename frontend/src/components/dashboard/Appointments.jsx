@@ -104,7 +104,7 @@ const Appointments = () => {
       }
     } catch (error) {
       console.error("Error cancelling appointment:", error);
-      toast.error("Failed to cancel appointment");
+      toast.error("Failed to cancel appointment",{autoClose:2000});
     }
   };
 
@@ -128,7 +128,7 @@ const Appointments = () => {
         error.response?.data?.message ||
         error.message ||
         "Failed to mark appointment as visited";
-      toast.error(errorMessage);
+      toast.error(errorMessage,{autoClose:2000});
       await fetchAppointments(); // Still refresh to ensure UI is in sync with backend
     }
   };
@@ -138,7 +138,7 @@ const Appointments = () => {
       const token = localStorage.getItem("token");
       const appointment = appointments.find((apt) => apt._id === appointmentId);
       if (!appointment) {
-        toast.error("Appointment not found");
+        toast.error("Appointment not found",{autoClose:2000});
         return;
       }
 
@@ -205,7 +205,7 @@ const Appointments = () => {
 
       // Handle payment failure
       rzp1.on("payment.failed", function (response) {
-        toast.error("Payment failed! " + response.error.description);
+        toast.error("Payment failed! " + response.error.description,{autoClose:2000});
       });
     } catch (error) {
       console.error("Error initiating payment:", error);
@@ -360,9 +360,9 @@ const Appointments = () => {
                               const url = appointment.meetingLink;
                               if (!url) {
                                 e.preventDefault();
-                                toast.error("Invalid meeting link");
+                                toast.error("Invalid meeting link",{autoClose:2000});
                                 return;
-                              }
+                              } 
 
                               // Determine platform and handle accordingly
                               if (url.includes("zoom.us")) {

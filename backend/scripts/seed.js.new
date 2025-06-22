@@ -114,7 +114,7 @@ const seedProperties = async () => {
       },
       {
         title: "Premium Flat in Indiranagar",
-        location: "Bangalore, India",
+        location: "Bengaluru, India",
         price: 25000000,
         image: [
           "https://ik.imagekit.io/ddtl85xea/property13.jpg",
