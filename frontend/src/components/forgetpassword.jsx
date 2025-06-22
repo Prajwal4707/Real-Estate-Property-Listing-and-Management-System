@@ -16,13 +16,13 @@ const ForgotPassword = () => {
     try {
       const response = await axios.post(`${Backendurl}/api/users/forgot`, { email });
       if (response.data.success) {
-        toast.success("Reset link sent to your email!");
+        toast.success("Reset link sent to your email!", { autoClose: 2000 });
       } else {
-        toast.error(response.data.message);
+        toast.error(response.data.message, { autoClose: 2000 });
       }
     } catch (error) {
       console.error("Error sending reset email:", error);
-      toast.error("Failed to send reset link. Please try again.");
+      toast.error("Failed to send reset link. Please try again.", { autoClose: 2000 });
     } finally {
       setLoading(false);
     }

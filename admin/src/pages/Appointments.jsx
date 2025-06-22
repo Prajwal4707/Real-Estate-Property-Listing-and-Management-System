@@ -29,7 +29,7 @@ const Appointments = () => {
       setLoading(true);
       const token = localStorage.getItem("token");
       if (!token) {
-        toast.error("Please login to access admin panel");
+        toast.error("Please login to access admin panel", { autoClose: 2000 });
         return;
       }
 
@@ -49,15 +49,15 @@ const Appointments = () => {
 
         setAppointments(validAppointments);
       } else {
-        toast.error(response.data.message || "Failed to fetch appointments");
+        toast.error(response.data.message || "Failed to fetch appointments", { autoClose: 2000 });
       }
     } catch (error) {
       console.error("Error fetching appointments:", error);
       if (error.response?.status === 401) {
-        toast.error("Session expired. Please login again");
+        toast.error("Session expired. Please login again", { autoClose: 2000 });
       } else {
         toast.error(
-          error.response?.data?.message || "Failed to fetch appointments"
+          error.response?.data?.message || "Failed to fetch appointments", { autoClose: 2000 }
         );
       }
     } finally {
@@ -79,12 +79,12 @@ const Appointments = () => {
       );
 
       if (response.data.success) {
-        toast.success(response.data.message);
+        toast.success(response.data.message, { autoClose: 2000 });
         // Always fetch appointments after successful status update
         await fetchAppointments();
       } else {
         toast.error(
-          response.data.message || "Failed to update appointment status"
+          response.data.message || "Failed to update appointment status", { autoClose: 2000 }
         );
       }
     } catch (error) {
@@ -94,7 +94,7 @@ const Appointments = () => {
         error.response?.data?.message ||
         error.message ||
         "Failed to update appointment status";
-      toast.error(errorMessage);
+      toast.error(errorMessage, { autoClose: 2000 });
       // Refresh the list anyway in case the update succeeded but the response failed
       await fetchAppointments();
     }
@@ -103,7 +103,7 @@ const Appointments = () => {
   const handleMeetingLinkUpdate = async (appointmentId) => {
     try {
       if (!meetingLink) {
-        toast.error("Please enter a meeting link");
+        toast.error("Please enter a meeting link", { autoClose: 2000 });
         return;
       }
 
@@ -119,16 +119,16 @@ const Appointments = () => {
       );
 
       if (response.data.success) {
-        toast.success("Meeting link sent successfully");
+        toast.success("Meeting link sent successfully", { autoClose: 2000 });
         setEditingMeetingLink(null);
         setMeetingLink("");
         fetchAppointments();
       } else {
-        toast.error(response.data.message);
+        toast.error(response.data.message, { autoClose: 2000 });
       }
     } catch (error) {
       console.error("Error updating meeting link:", error);
-      toast.error("Failed to update meeting link");
+      toast.error("Failed to update meeting link", { autoClose: 2000 });
     }
   };
 

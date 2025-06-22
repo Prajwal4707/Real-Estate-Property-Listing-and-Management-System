@@ -104,12 +104,12 @@ const BookedProperties = () => {
       });
 
       if (response.data.success) {
-        toast.success("Payment verified successfully");
+        toast.success("Payment verified successfully", { autoClose: 2000 });
         fetchBookedProperties();
       }
     } catch (error) {
       console.error("Error verifying payment:", error);
-      toast.error(error.response?.data?.message || "Failed to verify payment");
+      toast.error(error.response?.data?.message || "Failed to verify payment", { autoClose: 2000 });
     }
   };
 
@@ -137,7 +137,7 @@ const BookedProperties = () => {
       );
 
       if (response.data.success) {
-        toast.success("Property blocked successfully");
+        toast.success("Property blocked successfully", { autoClose: 2000 });
         // Update the specific property in the state
         setProperties(prevProperties => 
           prevProperties.map(property => 
@@ -147,11 +147,11 @@ const BookedProperties = () => {
           )
         );
       } else {
-        toast.error(response.data.message || "Failed to block property");
+        toast.error(response.data.message || "Failed to block property", { autoClose: 2000 });
       }
     } catch (error) {
       console.error("Error blocking property:", error);
-      toast.error(error.response?.data?.message || "Failed to block property");
+      toast.error(error.response?.data?.message || "Failed to block property", { autoClose: 2000 });
     }
   };
 
@@ -179,7 +179,7 @@ const BookedProperties = () => {
       );
 
       if (response.data.success) {
-        toast.success("Property unblocked successfully");
+        toast.success("Property unblocked successfully", { autoClose: 2000 });
         // Update the specific property in the state
         setProperties(prevProperties => 
           prevProperties.map(property => 
@@ -189,11 +189,11 @@ const BookedProperties = () => {
           )
         );
       } else {
-        toast.error(response.data.message || "Failed to unblock property");
+        toast.error(response.data.message || "Failed to unblock property", { autoClose: 2000 });
       }
     } catch (error) {
       console.error("Error unblocking property:", error);
-      toast.error(error.response?.data?.message || "Failed to unblock property");
+      toast.error(error.response?.data?.message || "Failed to unblock property", { autoClose: 2000 });
     }
   };
 
@@ -220,17 +220,17 @@ const BookedProperties = () => {
       );
 
       if (response.data.success) {
-        toast.success("Property removed from booked list successfully");
+        toast.success("Property removed from booked list successfully", { autoClose: 2000 });
         // Remove only the specific property from the state
         setProperties(prevProperties => 
           prevProperties.filter(property => property._id !== propertyId)
         );
       } else {
-        toast.error(response.data.message || "Failed to remove property from booked list");
+        toast.error(response.data.message || "Failed to remove property from booked list", { autoClose: 2000 });
       }
     } catch (error) {
       console.error("Error removing property from booked list:", error);
-      toast.error(error.response?.data?.message || "Failed to remove property from booked list");
+      toast.error(error.response?.data?.message || "Failed to remove property from booked list", { autoClose: 2000 });
     }
   };
 

@@ -38,14 +38,14 @@ const Login = () => {
           "Authorization"
         ] = `Bearer ${response.data.token}`;
 
-        toast.success("Admin login successful!");
+        toast.success("Admin login successful!", { autoClose: 2000 });
         navigate("/dashboard");
       } else {
-        toast.error(response.data.message || "Login failed");
+        toast.error(response.data.message || "Login failed", { autoClose: 2000 });
       }
     } catch (error) {
       console.error("Error logging in:", error);
-      toast.error(error.response?.data?.message || "Invalid admin credentials");
+      toast.error(error.response?.data?.message || "Invalid admin credentials", { autoClose: 2000 });
       // Clear any invalid tokens
       localStorage.clear();
     } finally {

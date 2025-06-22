@@ -30,7 +30,7 @@ const Appointments = () => {
       setLoading(true);
       const token = localStorage.getItem("token");
       if (!token) {
-        toast.error("Please login to view appointments");
+        toast.error("Please login to view appointments", { autoClose: 2000 });
         navigate("/login");
         return;
       }
@@ -48,16 +48,16 @@ const Appointments = () => {
         );
         setAppointments(validAppointments);
       } else {
-        toast.error(response.data.message || "Failed to fetch appointments");
+        toast.error(response.data.message || "Failed to fetch appointments", { autoClose: 2000 });
       }
     } catch (error) {
       console.error("Error fetching appointments:", error);
       if (error.response?.status === 401) {
-        toast.error("Session expired. Please login again");
+        toast.error("Session expired. Please login again", { autoClose: 2000 });
         navigate("/login");
       } else {
         toast.error(
-          error.response?.data?.message || "Error fetching appointments"
+          error.response?.data?.message || "Error fetching appointments", { autoClose: 2000 }
         );
       }
     } finally {

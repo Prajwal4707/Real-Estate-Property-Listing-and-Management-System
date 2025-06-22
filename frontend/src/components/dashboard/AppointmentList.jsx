@@ -26,7 +26,7 @@ const AppointmentList = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        toast.error("Please login to view appointments");
+        toast.error("Please login to view appointments", { autoClose: 2000 });
         return;
       }
 
@@ -44,7 +44,7 @@ const AppointmentList = () => {
     } catch (error) {
       console.error("Error fetching appointments:", error);
       toast.error(
-        error.response?.data?.message || "Failed to fetch appointments"
+        error.response?.data?.message || "Failed to fetch appointments", { autoClose: 2000 }
       );
     } finally {
       setLoading(false);
@@ -83,12 +83,12 @@ const AppointmentList = () => {
       );
 
       if (response.data.success) {
-        toast.success("Payment processed successfully");
+        toast.success("Payment processed successfully", { autoClose: 2000 });
         fetchAppointments();
       }
     } catch (error) {
       console.error("Error processing payment:", error);
-      toast.error(error.response?.data?.message || "Failed to process payment");
+      toast.error(error.response?.data?.message || "Failed to process payment", { autoClose: 2000 });
     }
   };
 

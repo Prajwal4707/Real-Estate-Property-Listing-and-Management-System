@@ -78,7 +78,7 @@ const ScheduleViewing = ({
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;
     if (isWeekend(selectedDate)) {
-      toast.error("Viewings are not available on weekends");
+      toast.error("Viewings are not available on weekends", { autoClose: 2000 });
       return;
     }
     setFormData((prev) => ({ ...prev, date: selectedDate, time: "" }));
@@ -87,7 +87,7 @@ const ScheduleViewing = ({
   const handleTimeChange = (e) => {
     const selectedTime = e.target.value;
     if (formData.date === dateRestrictions.min && isPastTime(selectedTime)) {
-      toast.error("Please select a future time slot");
+      toast.error("Please select a future time slot", { autoClose: 2000 });
       return;
     }
     setFormData((prev) => ({ ...prev, time: selectedTime }));
@@ -101,12 +101,12 @@ const ScheduleViewing = ({
       const selectedDate = new Date(formData.date);
       selectedDate.setHours(0, 0, 0, 0);
       if (selectedDate < today) {
-        toast.error("You cannot schedule a viewing for a past date.");
+        toast.error("You cannot schedule a viewing for a past date.", { autoClose: 2000 });
         return;
       }
       const token = localStorage.getItem("token");
       if (!token) {
-        toast.error("Please login to schedule a viewing");
+        toast.error("Please login to schedule a viewing", { autoClose: 2000 });
         return;
       }
 
@@ -140,7 +140,7 @@ const ScheduleViewing = ({
           error.response.data.message === "This time slot is already booked"
         ) {
           errorMessage =
-            "This time slot is no longer available. Please select another time.";
+            "This time slot is no longer available. Please select another time.", { autoClose: 2000 };
         } else {
           errorMessage = error.response.data.message;
         }
