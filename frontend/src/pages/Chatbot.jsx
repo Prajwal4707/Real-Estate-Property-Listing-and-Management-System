@@ -40,7 +40,7 @@ const FloatingChatbot = () => {
   return (
     <>
       {/* Floating Button */}
-      {/* {!open && (
+      {!open && (
         <button
           onClick={() => setOpen(true)}
           className="fixed bottom-8 right-8 z-50 bg-gradient-to-br from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-3xl shadow-xl p-4 flex items-center justify-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-blue-400/40 hover:shadow-2xl hover:animate-pulse"
@@ -48,7 +48,7 @@ const FloatingChatbot = () => {
         >
           <ChatIcon size={40} />
         </button>
-      )} */}
+      )}
       {/* Floating Chatbot Widget */}
       {open && (
         <div className="fixed bottom-8 right-8 z-50 w-80 max-w-full bg-white dark:bg-gray-800 rounded-xl shadow-2xl flex flex-col" style={{ minHeight: 420, maxHeight: 600 }}>

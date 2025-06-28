@@ -21,7 +21,8 @@ import {
   Eye,
   AlertCircle,
   Loader,
-  RefreshCcw
+  RefreshCcw,
+  X
 } from "lucide-react";
 import { backendurl } from "../App";
 
@@ -44,9 +45,14 @@ const Dashboard = () => {
     pendingAppointments: 0,
     recentActivity: [],
     viewsData: {},
+    uniqueVisitors: 0,
+    totalVisits: 0,
+    todayVisitors: 0,
+    thisMonthVisitors: 0,
     loading: true,
     error: null,
   });
+  const [showVisitorDetails, setShowVisitorDetails] = useState(false);
 
   // Chart options
   const chartOptions = {
@@ -174,6 +180,14 @@ const Dashboard = () => {
       description: "Property page views",
     },
     {
+      title: "Total Visits",
+      value: stats.totalVisits || 0,
+      icon: TrendingUp,
+      color: "bg-teal-500",
+      description: "Total page visits",
+      clickable: true,
+    },
+    {
       title: "Pending Appointments",
       value: stats.pendingAppointments,
       icon: Calendar,
@@ -241,14 +255,16 @@ const Dashboard = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+        <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 mb-6 sm:mb-8">
           {statCards.map((stat, index) => (
             <motion.div
               key={stat.title}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white p-4 sm:p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+              className={`bg-white p-4 sm:p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 ${stat.clickable ? 'cursor-pointer hover:ring-2 hover:ring-teal-400' : ''}`}
+              onClick={stat.clickable ? () => setShowVisitorDetails(true) : undefined}
+              title={stat.clickable ? 'Click to view visitor details' : undefined}
             >
               <div className="flex items-center justify-between mb-3 sm:mb-4">
                 <div className={`p-2 sm:p-3 rounded-lg ${stat.color}`}>
@@ -340,6 +356,102 @@ const Dashboard = () => {
           </motion.div>
         </div>
       </div>
+
+      {/* Visitor Details Modal */}
+      {showVisitorDetails && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full max-h-[80vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                Visitor Details
+              </h3>
+              <button
+                onClick={() => setShowVisitorDetails(false)}
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="space-y-4">
+              <div className="bg-blue-50 dark:bg-gray-700 rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Users className="w-5 h-5 text-blue-600 mr-2" />
+                    <span className="font-medium text-gray-900 dark:text-white">Unique Visitors</span>
+                  </div>
+                  <span className="text-xl font-bold text-blue-600">
+                    {stats.uniqueVisitors?.toLocaleString()}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  New visitors who have never been to the site before
+                </p>
+              </div>
+              <div className="bg-green-50 dark:bg-gray-700 rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <TrendingUp className="w-5 h-5 text-green-600 mr-2" />
+                    <span className="font-medium text-gray-900 dark:text-white">Total Visits</span>
+                  </div>
+                  <span className="text-xl font-bold text-green-600">
+                    {stats.totalVisits?.toLocaleString()}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  Total number of page visits including returning visitors
+                </p>
+              </div>
+              <div className="bg-purple-50 dark:bg-gray-700 rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Eye className="w-5 h-5 text-purple-600 mr-2" />
+                    <span className="font-medium text-gray-900 dark:text-white">Today's Visitors</span>
+                  </div>
+                  <span className="text-xl font-bold text-purple-600">
+                    {stats.todayVisitors?.toLocaleString()}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  Visitors who came to the site today
+                </p>
+              </div>
+              <div className="bg-orange-50 dark:bg-gray-700 rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <TrendingUp className="w-5 h-5 text-orange-600 mr-2" />
+                    <span className="font-medium text-gray-900 dark:text-white">This Month</span>
+                  </div>
+                  <span className="text-xl font-bold text-orange-600">
+                    {stats.thisMonthVisitors?.toLocaleString()}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  Visitors who came to the site this month
+                </p>
+              </div>
+              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                    {stats.totalVisits > 0 ? Math.round((stats.uniqueVisitors / stats.totalVisits) * 100) : 0}%
+                  </div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    New Visitor Rate
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    Percentage of visits from new visitors
+                  </p>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowVisitorDetails(false)}
+              className="w-full mt-6 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 };

@@ -34,7 +34,7 @@ class AIService {
             }
           ],
           temperature: 0.7,
-          max_tokens: 800,
+          max_tokens: 500,
           top_p: 1
         })
       });

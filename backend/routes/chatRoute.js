@@ -13,7 +13,8 @@ router.post("/", async (req, res) => {
   // Fetch a few properties from the database
   let propertySummary = "";
   try {
-    const properties = await Property.find({ isBlocked: false }).limit(15);
+    // const properties = await Property.find({ isBlocked: false }).limit(50);    //only accesses first 50 properties
+    const properties = await Property.find({ isBlocked: false });
     if (properties.length > 0) {
       propertySummary = properties.map((p, i) =>
         `${i + 1}. ${p.title}\n   Location: ${p.location}\n   Price: ₹${p.price}\n   Bedrooms: ${p.beds}\n   Bathrooms: ${p.baths}\n   Area: ${p.sqft} sqft`
@@ -50,7 +51,7 @@ If the user's question matches one of these properties, use the details provided
       body: JSON.stringify({
         model: "openai/gpt-4.1", // or another model available on OpenRouter
         messages: aiMessages,
-        max_tokens: 500,
+        max_tokens: 400,
         temperature: 0.7,
       }),
     });

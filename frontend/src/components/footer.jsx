@@ -17,6 +17,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { Backendurl } from "../App";
+import VisitorCounter from "./VisitorCounter";
 
 // Mobile Collapsible Footer Section
 const MobileFooterSection = ({ title, children }) => {
@@ -389,9 +390,12 @@ const Footer = () => {
       {/* Bottom Bar */}
       <div className="bg-gray-100 border-t border-gray-200 py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-sm text-gray-600 mb-4 md:mb-0 text-center md:text-left">
-            © {new Date().getFullYear()} BuildEstate. All Rights Reserved.
-          </p>
+          <div className="flex flex-col sm:flex-row items-center gap-4 mb-4 md:mb-0">
+            <p className="text-sm text-gray-600 text-center md:text-left">
+              © {new Date().getFullYear()} BuildEstate. All Rights Reserved.
+            </p>
+            <VisitorCounter />
+          </div>
 
           <motion.a
             href="/properties"

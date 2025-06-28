@@ -14,7 +14,8 @@ class FirecrawlService {
             
             // URLs for property websites (using 99acres as an example)
             const urls = [
-                `https://www.99acres.com/property-in-${formattedLocation}-ffid/*`
+                `https://www.99acres.com/property-in-${formattedLocation}-ffid/*`,
+                `https://www.99acres.com/${formattedLocation}-real-estate` // Additional catch-all city page
             ];
 
             const propertyTypePrompt = propertyType === "Flat" ? "Flats" : "Individual Houses";
@@ -69,16 +70,15 @@ class FirecrawlService {
             const extractResult = await this.firecrawl.extract(
                 urls,
                 {
-                    prompt: `Extract ONLY ${limit} different ${propertyCategory} ${propertyTypePrompt} from ${city} that cost less than ${maxPrice} crores.
-                    
-                    Requirements:
+                    prompt: `Extract up to ${limit} different ${propertyCategory} ${propertyTypePrompt} from ${city} that cost less than ${maxPrice} crores.
+                    \nRequirements:
                     - Property Category: ${propertyCategory} properties only
                     - Property Type: ${propertyTypePrompt} only
                     - Location: ${city}
                     - Maximum Price: ${maxPrice} crores
                     - Include essential property details (building name, price, location, area)
                     - Keep descriptions brief (under 100 words)
-                    - IMPORTANT: Return data for EXACTLY ${limit} different properties. No more.
+                    - IMPORTANT: Return data for as many properties as possible, up to ${limit}.
                     `,
                     schema: propertySchema,
                     enableWebSearch: true

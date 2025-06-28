@@ -1,6 +1,7 @@
 import Property from "../models/propertymodel.js";
 import Appointment from "../models/appointmentModel.js";
 import User from "../models/Usermodel.js";
+import Visitor from "../models/visitorModel.js";
 import transporter from "../config/nodemailer.js";
 import { getEmailTemplate } from "../email.js";
 
@@ -34,6 +35,8 @@ export const getAdminStats = async (req, res) => {
       recentActivity,
       viewsData,
       totalPropertyViews,
+      uniqueVisitors,
+      totalVisits,
     ] = await Promise.all([
       Property.countDocuments(),
       Property.countDocuments({ isBlocked: false, isBooked: false }),
@@ -42,6 +45,19 @@ export const getAdminStats = async (req, res) => {
       getRecentActivity(),
       getViewsData(),
       Property.aggregate([{ $group: { _id: null, total: { $sum: "$views" } } }]).then(res => res[0]?.total || 0),
+      Visitor.getUniqueVisitors(),
+      Visitor.getTotalVisits(),
+    ]);
+
+    // Calculate today's and this month's visitors
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const thisMonth = new Date();
+    thisMonth.setDate(1);
+    thisMonth.setHours(0, 0, 0, 0);
+    const [todayVisitors, thisMonthVisitors] = await Promise.all([
+      Visitor.countDocuments({ lastVisit: { $gte: today } }),
+      Visitor.countDocuments({ lastVisit: { $gte: thisMonth } })
     ]);
 
     res.json({
@@ -54,6 +70,10 @@ export const getAdminStats = async (req, res) => {
         recentActivity,
         viewsData,
         totalViews: totalPropertyViews,
+        uniqueVisitors,
+        totalVisits,
+        todayVisitors,
+        thisMonthVisitors,
       },
     });
   } catch (error) {

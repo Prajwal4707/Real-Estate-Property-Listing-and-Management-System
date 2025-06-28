@@ -56,10 +56,11 @@ const Login = () => {
   return (
     <section className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-2">
       <div className="w-full max-w-sm sm:max-w-md bg-white rounded-xl shadow p-6 sm:p-8 mx-auto my-8 sm:my-16 dark:bg-gray-800 dark:border dark:border-gray-700">
-        <div className="space-y-4 md:space-y-6">
+        <div className="space-y-6 md:space-y-8">
           <h1 className="text-xl sm:text-2xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white text-center">
             Admin Login
           </h1>
+
           <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
             {/* Email Input */}
             <div>
