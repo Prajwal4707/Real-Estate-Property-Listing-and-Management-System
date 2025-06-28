@@ -36,6 +36,11 @@ const SearchForm = ({ onSearch, isLoading }) => {
     setActiveField(null);
   };
 
+  const handleInputBlur = (e) => {
+    // Use a timeout to ensure click events are processed first
+    setTimeout(() => setActiveField(null), 100);
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 10 }}
@@ -65,7 +70,7 @@ const SearchForm = ({ onSearch, isLoading }) => {
               value={searchParams.city}
               onChange={handleChange}
               onFocus={() => setActiveField('city')}
-              onBlur={() => setTimeout(() => setActiveField(null), 100)}
+              onBlur={handleInputBlur}
               placeholder="Enter city name (e.g., Mumbai)"
               className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-shadow text-sm sm:text-base"
               required
@@ -81,7 +86,10 @@ const SearchForm = ({ onSearch, isLoading }) => {
                   {popularCities.map((city) => (
                     <div
                       key={city}
-                      onClick={() => handleCitySelect(city)}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        handleCitySelect(city);
+                      }}
                       className="px-3 py-2 hover:bg-blue-50 cursor-pointer text-gray-700 flex items-center"
                     >
                       <MapPin className="w-4 h-4 mr-2 text-gray-400" />

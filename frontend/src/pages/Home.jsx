@@ -7,7 +7,7 @@ import Blog from "../components/Blog";
 
 const Home = () => {
   return (
-    <div>
+    <div className="relative">
       <Hero />
       <Features />
       <Properties /> <Steps />

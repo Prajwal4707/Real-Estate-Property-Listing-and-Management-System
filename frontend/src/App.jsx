@@ -21,6 +21,8 @@ import MyBookings from "./components/dashboard/Appointments";
 import Dashboard from "./components/dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "react-toastify/dist/ReactToastify.css";
+import Chatbot from "./pages/Chatbot";
+import FloatingChatbot from "./pages/Chatbot";
 
 export const Backendurl = import.meta.env.VITE_API_BASE_URL;
 
@@ -34,6 +36,7 @@ const App = () => {
           <StructuredData type="organization" />
 
           <Navbar />
+          <FloatingChatbot />
           <Routes>
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
@@ -46,8 +49,9 @@ const App = () => {
               element={<PropertyDetails />}
             />
             <Route path="/about" element={<Aboutus />} />
-            <Route path="/contact" element={<Contact />} />{" "}
+            <Route path="/contact" element={<Contact />} />
             <Route path="/ai-property-hub" element={<AIPropertyHub />} />
+            <Route path="/chatbot" element={<Chatbot />} />
             <Route
               path="/dashboard"
               element={

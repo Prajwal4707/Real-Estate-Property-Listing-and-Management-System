@@ -15,7 +15,8 @@ import adminRouter from "./routes/adminRoute.js";
 import propertyRoutes from "./routes/propertyRoutes.js";
 import { paymentRoutes } from "./routes/paymentRoute.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
-dotenv.config();
+import chatRoute from "./routes/chatRoute.js";
+dotenv.config({ path: './.env' });
 
 const app = express();
 
@@ -108,6 +109,7 @@ app.use("/api/admin", adminRouter);
 app.use("/api/property", propertyRoutes);
 app.use("/api/appointments/payment", paymentRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/chat", chatRoute);
 
 app.use((err, req, res, next) => {
   console.error("Error:", err);

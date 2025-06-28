@@ -22,7 +22,7 @@ class AIService {
           'Authorization': `Bearer ${this.openRouterApiKey}`
         },
         body: JSON.stringify({
-          model: "openai/gpt-3.5-turbo", // You can change to another model if desired
+          model: "openai/gpt-4.1", // You can change to another model if desired
           messages: [
             { 
               role: "system", 

@@ -36,7 +36,7 @@ const Signup = () => {
       );
       if (response.data.success) {
         localStorage.setItem('token', response.data.token);
-        toast.success('Account created successfully!');
+        toast.success('Account created successfully!', {autoClose:2000});
         navigate('/');
       } else {
         toast.error(response.data.message);
