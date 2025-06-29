@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -23,6 +23,7 @@ import ScheduleViewing from "./ScheduleViewing";
 
 const PropertyDetails = () => {
   const { id } = useParams();
+  const location = useLocation();
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -34,6 +35,11 @@ const PropertyDetails = () => {
 
   useEffect(() => {
     const fetchProperty = async () => {
+      // Reset fetched flag if navigation is from chatbot
+      if (location.state?.fromChatbot) {
+        fetched.current = false;
+      }
+      
       if (fetched.current) return;
       fetched.current = true;
       try {
@@ -61,13 +67,14 @@ const PropertyDetails = () => {
     };
 
     fetchProperty();
-  }, [id]);
+  }, [id, location.state?.fromChatbot]);
 
   useEffect(() => {
     // Reset scroll position and active image when component mounts
     window.scrollTo(0, 0);
     setActiveImage(0);
   }, [id]);
+
   const parseAmenities = (amenities) => {
     if (!amenities) return [];
 
@@ -139,6 +146,29 @@ const PropertyDetails = () => {
       console.error("Error sharing:", error);
     }
   };
+
+  // Helper function to format price/rent display
+  const formatPriceDisplay = (property) => {
+    if (property?.isRental && property?.rentAmount) {
+      return {
+        label: "Monthly Rent",
+        amount: property.rentAmount,
+        suffix: "/month",
+        additionalInfo: `Security Deposit: ₹${property.securityDeposit?.toLocaleString("en-IN")}`
+      };
+    } else {
+      // For sale properties, parse the price string and format it
+      const priceNumber = parseInt(property?.price) || 0;
+      return {
+        label: "Price",
+        amount: priceNumber,
+        suffix: "",
+        additionalInfo: ""
+      };
+    }
+  };
+
+  const priceInfo = formatPriceDisplay(property);
 
   if (loading) {
     return (
@@ -372,10 +402,10 @@ const PropertyDetails = () => {
               <div>
                 <div className="bg-blue-50 rounded-lg p-6 mb-6">
                   <p className="text-3xl font-bold text-blue-600 mb-2">
-                    ₹{Number(property.price).toLocaleString("en-IN")}
+                    {priceInfo.label}: ₹{Number(priceInfo.amount).toLocaleString("en-IN")}
                   </p>
                   <p className="text-gray-600">
-                    Available for {property.availability}
+                    {priceInfo.additionalInfo}
                   </p>
                 </div>
 

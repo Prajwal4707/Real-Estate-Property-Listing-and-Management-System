@@ -234,7 +234,7 @@ const AIPropertyHub = () => {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
                       <a
-                        href="https://github.com/AAYUSH412/Real-Estate-Website"
+                        href="https://github.com/Prajwal4707/Real-Estate-Property-Listing-and-Management-System.git"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors"
@@ -243,7 +243,7 @@ const AIPropertyHub = () => {
                         <span>View on GitHub</span>
                       </a>
                       <a
-                        href="https://github.com/AAYUSH412/Real-Estate-Website/archive/refs/heads/main.zip"
+                        href="https://github.com/Prajwal4707/Real-Estate-Property-Listing-and-Management-System.git"
                         className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
                       >
                         <Download className="w-4 h-4" />

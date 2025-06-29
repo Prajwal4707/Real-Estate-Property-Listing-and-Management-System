@@ -25,8 +25,8 @@ const StructuredData = ({ type, data }) => {
       url: 'https://buildestate-frontend.vercel.app/',
       logo: 'https://buildestate-frontend.vercel.app//logo.png',
       sameAs: [
-        'https://github.com/AAYUSH412/Real-Estate-Website',
-        'https://linkedin.com/in/AAYUSH412'
+        'https://github.com/Prajwal4707/Real-Estate-Property-Listing-and-Management-System.git',
+        'https://www.linkedin.com/in/prajwal-allayyanavar/'
       ]
     },
     property: {
