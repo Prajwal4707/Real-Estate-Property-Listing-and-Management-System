@@ -27,12 +27,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AAYUSH412/Real-Estate-Website.git"
+    "url": "https://github.com/Prajwal4707/Real-Estate-Property-Listing-and-Management-System.git.git"
   },
   "bugs": {
-    "url": "https://github.com/AAYUSH412/Real-Estate-Website/issues"
+    "url": "https://github.com/Prajwal4707/Real-Estate-Property-Listing-and-Management-System.git/issues"
   },
-  "homepage": "https://github.com/AAYUSH412/Real-Estate-Website#readme",
+  "homepage": "https://github.com/Prajwal4707/Real-Estate-Property-Listing-and-Management-System.git#readme",
   "devDependencies": {
     "concurrently": "^8.0.0"
   },
