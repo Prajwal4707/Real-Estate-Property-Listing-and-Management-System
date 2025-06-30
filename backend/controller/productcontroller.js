@@ -2,6 +2,10 @@ import fs from "fs";
 import imagekit from "../config/imagekit.js";
 import Property from "../models/propertymodel.js";
 import path from "path";
+import User from '../models/Usermodel.js';
+import News from '../models/newsmodel.js';
+import transporter from '../config/nodemailer.js';
+import { getNewPropertyEmailTemplate } from '../email.js';
 
 // Ensure uploads directory exists
 const uploadsDir = path.join(process.cwd(), "uploads");
@@ -113,6 +117,32 @@ const addproperty = async (req, res) => {
 
     // Save the product to the database
     await product.save();
+
+    // Send notification emails to all users and newsletter subscribers
+    try {
+      // Fetch all user emails
+      const users = await User.find({}, 'email');
+      // Fetch all newsletter emails
+      const subscribers = await News.find({}, 'email');
+      // Combine and deduplicate emails
+      const allEmails = Array.from(new Set([
+        ...users.map(u => u.email),
+        ...subscribers.map(s => s.email)
+      ]));
+      // Property link (customize as needed)
+      const propertyLink = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/properties`;
+      // Send one email per recipient
+      for (const email of allEmails) {
+        await transporter.sendMail({
+          from: `BuildEstate <${process.env.EMAIL}>`,
+          to: email,
+          subject: `New Property Listed: ${title}`,
+          html: getNewPropertyEmailTemplate(title, location, propertyLink),
+        });
+      }
+    } catch (mailError) {
+      console.error('Error sending new property notification emails:', mailError);
+    }
 
     res.json({ message: "Property added successfully", success: true });
   } catch (error) {

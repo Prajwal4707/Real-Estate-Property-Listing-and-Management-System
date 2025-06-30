@@ -2,7 +2,7 @@ import News from "../models/newsmodel.js";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import transporter from "../config/nodemailer.js";
-import { getEmailTemplate } from "../email.js";
+import { getNewsletterTemplate } from "../email.js";
 
 const submitNewsletter = async (req, res) => {
   try {

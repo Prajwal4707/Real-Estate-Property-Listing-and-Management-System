@@ -150,18 +150,18 @@ const Newsletter = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${Backendurl || "http://localhost:4000"}/news/newsdata`,
+        `${Backendurl || "http://localhost:4000"}/api/news/newsdata`,
         { email }
       );
       if (response.status === 200) {
-        toast.success("Successfully subscribed to our newsletter!");
+        toast.success("Successfully subscribed to our newsletter!",{autoClose:2000});
         setEmail("");
       } else {
-        toast.error("Failed to subscribe. Please try again.");
+        toast.error("Failed to subscribe. Please try again.",{autoClose:2000});
       }
     } catch (error) {
       console.error("Error subscribing to newsletter:", error);
-      toast.error("Failed to subscribe. Please try again.");
+      toast.error("Failed to subscribe. Please try again.",{autoClose:2000});
     } finally {
       setLoading(false);
     }

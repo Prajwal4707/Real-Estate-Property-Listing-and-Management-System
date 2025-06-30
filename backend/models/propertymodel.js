@@ -84,6 +84,7 @@ const propertySchema = new mongoose.Schema(
         default: Date.now,
       },
     ],
+    seeded: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

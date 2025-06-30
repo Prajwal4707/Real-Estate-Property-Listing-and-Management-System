@@ -6,7 +6,7 @@ const seedProperties = async () => {
     await connectdb();
 
     console.log("Clearing old property data...");
-    await Property.deleteMany();
+    await Property.deleteMany({ seeded: true });
 
     console.log("Inserting sample properties...");
     const properties = [
@@ -27,6 +27,7 @@ const seedProperties = async () => {
           "A stunning luxury apartment in Bandra with sea view, modern design, and premium amenities.",
         amenities: ["Pool", "Gym", "Parking", "Elevator", "24/7 Security"],
         phone: "+91-982-555-1234",
+        seeded: true,
       },
       {
         title: "Mountain View Villa in Shimla",
@@ -51,6 +52,7 @@ const seedProperties = async () => {
           "Private Garden",
         ],
         phone: "+91-981-555-6543",
+        seeded: true,
       },
       {
         title: "Luxury Apartment in South Delhi",
@@ -69,6 +71,7 @@ const seedProperties = async () => {
           "An elegant apartment in the heart of South Delhi with premium finishes and modern amenities.",
         amenities: ["Club House", "Doorman", "Parking", "Gym", "Swimming Pool"],
         phone: "+91-981-555-8101",
+        seeded: true,
       },
       {
         title: "Luxury Villa in Jubilee Hills",
@@ -94,6 +97,7 @@ const seedProperties = async () => {
           "Power Backup",
         ],
         phone: "+91-900-000-0001",
+        seeded: true,
       },
       {
         title: "Sea-facing Apartment in Worli",
@@ -119,6 +123,7 @@ const seedProperties = async () => {
           "24/7 Security",
         ],
         phone: "+91-982-000-0002",
+        seeded: true,
       },
       {
         title: "Contemporary Home in DLF Phase 1",
@@ -143,6 +148,7 @@ const seedProperties = async () => {
           "Security",
         ],
         phone: "+91-995-000-0003",
+        seeded: true,
       },
       {
         title: "Premium Flat in Indiranagar",
@@ -167,6 +173,7 @@ const seedProperties = async () => {
           "24/7 Security",
         ],
         phone: "+91-963-000-0004",
+        seeded: true,
       },
       {
         title: "Luxury Penthouse in Whitefield",
@@ -192,6 +199,7 @@ const seedProperties = async () => {
           "24/7 Security",
         ],
         phone: "+91-900-000-0005",
+        seeded: true,
       },
       {
         title: "Garden Villa in Koramangala",
@@ -217,6 +225,7 @@ const seedProperties = async () => {
           "24/7 Security",
         ],
         phone: "+91-900-000-0006",
+        seeded: true,
       },
       {
         title: "Premium Apartment in HSR Layout",
@@ -241,6 +250,7 @@ const seedProperties = async () => {
           "24/7 Security",
         ],
         phone: "+91-900-000-0007",
+        seeded: true,
       },
       {
         title: "Modern Studio Apartment in Pune",
@@ -265,6 +275,7 @@ const seedProperties = async () => {
           "Intercom",
         ],
         phone: "+91-900-000-0010",
+        seeded: true,
       },
       {
         title: "Spacious Bungalow in Chandigarh",
@@ -288,6 +299,7 @@ const seedProperties = async () => {
           "Modular Kitchen",
         ],
         phone: "+91-900-000-0009",
+        seeded: true,
       },
       {
         title: "Ms Vardhaman Ventures Orionis Propus",
@@ -304,6 +316,7 @@ const seedProperties = async () => {
         description: "Modern 2 BHK apartment in Angol with all amenities, close to schools and markets.",
         amenities: ["Lift", "Parking", "24/7 Security"],
         phone: "+91-900-000-1001",
+        seeded: true,
       },
       {
         title: "Veetrag Ruby Pride",
@@ -320,6 +333,7 @@ const seedProperties = async () => {
         description: "Spacious 2 BHK flat in a prime area, with modern amenities and good connectivity.",
         amenities: ["Gym", "Parking", "Children's Play Area"],
         phone: "+91-900-000-1002",
+        seeded: true,
       },
       {
         title: "Amogh Golden Pearl",
@@ -335,7 +349,8 @@ const seedProperties = async () => {
         availability: "For Sale",
         description: "Affordable 2 BHK apartment in Piranwadi, ideal for families.",
         amenities: ["Parking", "Lift", "24/7 Security"],
-        phone: "+91-900-000-1003"
+        phone: "+91-900-000-1003",
+        seeded: true,
       },
       {
         title: "Noorani Corbel One City Homes",
@@ -352,6 +367,7 @@ const seedProperties = async () => {
         description: "Ready-to-move 3 BHK in Shahapur, with excellent ventilation and amenities.",
         amenities: ["Lift", "Parking", "Power Backup"],
         phone: "+91-900-000-1004",
+        seeded: true,
       },
       {
         title: "Veerbhadrappa Vaishnavii Residency I",
@@ -368,6 +384,7 @@ const seedProperties = async () => {
         description: "2 BHK flat in Sadashiv Nagar, close to the Bangalore-Mumbai Economic Corridor.",
         amenities: ["Parking", "Lift"],
         phone: "+91-900-000-1005",
+        seeded: true,
       },
       {
         title: "Fortune Tower",
@@ -384,6 +401,7 @@ const seedProperties = async () => {
         description: "Premium 3 BHK apartment in Fortune Tower, SBI Colony.",
         amenities: ["Gym", "Club House", "Parking"],
         phone: "+91-900-000-1006",
+        seeded: true,
       },
       {
         title: "Guru Krupa Nilaya",
@@ -400,6 +418,7 @@ const seedProperties = async () => {
         description: "2 BHK ready-to-move flat in Anjaneya Nagar, with modern amenities.",
         amenities: ["Parking", "Lift", "24/7 Security"],
         phone: "+91-900-000-1007",
+        seeded: true,
       },
       {
         title: "Lotus Pinnacle",
@@ -416,6 +435,7 @@ const seedProperties = async () => {
         description: "Spacious 2 BHK in Mandoli, with all modern facilities.",
         amenities: ["Gym", "Parking", "Children's Play Area"],
         phone: "+91-900-000-1008",
+        seeded: true,
       },
       {
         title: "Noorani The Strand",
@@ -432,6 +452,7 @@ const seedProperties = async () => {
         description: "Luxury 3 BHK apartment in Sadashiv Nagar, Noorani The Strand.",
         amenities: ["Gym", "Club House", "Parking", "Swimming Pool"],
         phone: "+91-900-000-1009",
+        seeded: true,
       },
       {
         title: "Windmills By Your Side By Swarna Griha",
@@ -448,8 +469,9 @@ const seedProperties = async () => {
         description: "2 BHK apartment in Kakati, ready to move, with all amenities.",
         amenities: ["Parking", "Lift", "24/7 Security"],
         phone: "+91-900-000-1010",
+        seeded: true,
       },
-    ];
+    ].map(p => ({ ...p, seeded: true }));
 
     await Property.insertMany(properties);
     console.log("✅ Seed data inserted successfully!");

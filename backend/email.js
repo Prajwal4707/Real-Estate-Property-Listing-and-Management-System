@@ -420,3 +420,19 @@ export const getPasswordResetTemplate = (resetUrl) => `
     </div>
   </div>
 `;
+
+export const getNewPropertyEmailTemplate = (title, location, link) => `
+  <div style="max-width:600px;margin:20px auto;font-family:'Arial',sans-serif;line-height:1.6;">
+    <div style="background:linear-gradient(135deg,#2563eb,#1e40af);padding:32px 20px;border-radius:15px 15px 0 0;text-align:center;">
+      <h1 style="color:#fff;margin:0;font-size:26px;font-weight:700;">New Property Listed!</h1>
+    </div>
+    <div style="background:#fff;padding:32px 24px;border-radius:0 0 15px 15px;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+      <h2 style="color:#1e40af;margin:0 0 10px 0;font-size:20px;">${title}</h2>
+      <p style="margin:8px 0;color:#374151;"><strong>Location:</strong> ${location}</p>
+      <a href="${link}" style="display:inline-block;margin-top:18px;padding:10px 22px;background:#2563eb;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;">View Property</a>
+    </div>
+    <div style="text-align:center;margin-top:30px;">
+      <p style="color:#6b7280;font-size:14px;">© ${new Date().getFullYear()} BuildEstate. All rights reserved.</p>
+    </div>
+  </div>
+`;
