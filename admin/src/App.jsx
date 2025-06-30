@@ -15,6 +15,7 @@ import Add from "./pages/Add";
 import Update from "./pages/Update";
 import Appointments from "./pages/Appointments";
 import BookedProperties from "./pages/BookedProperties";
+import Testimonials from "./pages/Testimonials";
 
 // Config
 export const backendurl = import.meta.env.VITE_BACKEND_URL;
@@ -75,6 +76,10 @@ const App = () => {
                         <Route
                           path="/booked-properties"
                           element={<BookedProperties />}
+                        />
+                        <Route
+                          path="/testimonials"
+                          element={<Testimonials />}
                         />
                         {/* Redirect to dashboard for any unmatched routes within protected area */}
                         <Route
