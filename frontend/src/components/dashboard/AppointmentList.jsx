@@ -61,13 +61,13 @@ const AppointmentList = () => {
       );
 
       if (response.data.success) {
-        toast.success("Appointment marked as visited",{autoClose:2000});
+        toast.success("Appointment marked as visited",{autoClose:3000});
         fetchAppointments();
       }
     } catch (error) {
       console.error("Error marking appointment as visited:", error);
       toast.error(
-        error.response?.data?.message || "Failed to mark appointment as visited",{autoClose:2000}
+        error.response?.data?.message || "Failed to mark appointment as visited",{autoClose:3000}
       );
     }
   };

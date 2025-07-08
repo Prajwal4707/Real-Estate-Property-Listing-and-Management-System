@@ -72,11 +72,11 @@ export default function useContactForm() {
         
         // Show success message based on auto-approval status
         if (formData.isTestimonial && response.data.autoApproved) {
-          toast.success("Testimonial submitted and approved! Thank you for your review.",{autoClose:2000});
+          toast.success("Testimonial submitted and approved! Thank you for your review.",{autoClose:3000});
         } else if (formData.isTestimonial) {
-          toast.success("Testimonial submitted successfully! It will be reviewed and published soon.", {autoClose:2000});
+          toast.success("Testimonial submitted successfully! It will be reviewed and published soon.", {autoClose:3000});
         } else {
-          toast.success("Message sent successfully!", {autoClose:2000});
+          toast.success("Message sent successfully!", {autoClose:3000});
         }
 
         // Reset form

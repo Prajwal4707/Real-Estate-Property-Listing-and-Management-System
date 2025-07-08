@@ -5,8 +5,8 @@ import Property from "../models/propertymodel.js";
 import transporter from "../config/nodemailer.js";
 
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_meL58e1NfBNqxd",
-  key_secret: process.env.RAZORPAY_KEY_SECRET || "geS94AazUCXTzXRGaEm1fhei",
+  key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_xatRJpca3YW9KX",
+  key_secret: process.env.RAZORPAY_KEY_SECRET || "tfI3llyHYilbxYVP1aoaM1jA",
 });
 
 // Create a new order
@@ -29,10 +29,10 @@ export const createOrder = async (req, res) => {
         success: false,
         message: "Appointment must be marked as visited before payment",
       });
-    } // Calculate 5% of property price
-    // Convert price to paise and calculate 5%
+    } // Calculate 3% of property price
+    // Convert price to paise and calculate 3%
     const propertyPrice = appointment.propertyId.price;
-    let tokenAmount = Math.round(propertyPrice * 0.05 * 100); // Convert to paise and calculate 5%
+    let tokenAmount = Math.round(propertyPrice * 0.03 * 100); // Convert to paise and calculate 3%
 
     // Cap the amount at ₹500,000 (50,000,000 paise) for Razorpay test mode
     const MAX_TEST_AMOUNT = 50000000; // 5 lakhs in paise

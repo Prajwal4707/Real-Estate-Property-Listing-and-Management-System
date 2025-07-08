@@ -97,14 +97,14 @@ const Appointments = () => {
       );
 
       if (response.data.success) {
-        toast.success("Appointment cancelled successfully",{autoClose:2000});
+        toast.success("Appointment cancelled successfully",{autoClose:3000});
         fetchAppointments();
       } else {
-        toast.error(response.data.message || "Failed to cancel appointment",{autoClose:2000});
+        toast.error(response.data.message || "Failed to cancel appointment",{autoClose:3000});
       }
     } catch (error) {
       console.error("Error cancelling appointment:", error);
-      toast.error("Failed to cancel appointment",{autoClose:2000});
+      toast.error("Failed to cancel appointment",{autoClose:3000});
     }
   };
 
@@ -117,10 +117,10 @@ const Appointments = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.data.success) {
-        toast.success("Appointment marked as visited.",{autoClose:2000});
+        toast.success("Appointment marked as visited.",{autoClose:3000});
         fetchAppointments();
       } else {
-        toast.error(response.data.message || "Failed to mark as visited",{autoClose:2000});
+        toast.error(response.data.message || "Failed to mark as visited",{autoClose:3000});
       }
     } catch (error) {
       console.error("Error marking appointment as visited:", error);
@@ -128,7 +128,7 @@ const Appointments = () => {
         error.response?.data?.message ||
         error.message ||
         "Failed to mark appointment as visited";
-      toast.error(errorMessage,{autoClose:2000});
+      toast.error(errorMessage,{autoClose:3000});
       await fetchAppointments(); // Still refresh to ensure UI is in sync with backend
     }
   };
@@ -138,7 +138,7 @@ const Appointments = () => {
       const token = localStorage.getItem("token");
       const appointment = appointments.find((apt) => apt._id === appointmentId);
       if (!appointment) {
-        toast.error("Appointment not found",{autoClose:2000});
+        toast.error("Appointment not found",{autoClose:3000});
         return;
       }
 
@@ -155,7 +155,7 @@ const Appointments = () => {
 
       // Configure Razorpay options
       const options = {
-        key: "rzp_test_meL58e1NfBNqxd",
+        key: "rzp_test_xatRJpca3YW9KX",
         amount: orderResponse.data.amount,
         currency: orderResponse.data.currency,
         name: "BuildEstate",
@@ -176,17 +176,17 @@ const Appointments = () => {
             );
 
             if (verifyResponse.data.success) {
-              toast.success("Payment successful!",{autoClose:2000});
+              toast.success("Payment successful!",{autoClose:3000});
               fetchAppointments();
             } else {
               toast.error(
-                verifyResponse.data.message || "Payment verification failed",{autoClose:2000}
+                verifyResponse.data.message || "Payment verification failed",{autoClose:3000}
               );
             }
           } catch (error) {
             console.error("Payment verification failed:", error);
             toast.error(
-              error.response?.data?.message || "Payment verification failed",{autoClose:2000}
+              error.response?.data?.message || "Payment verification failed",{autoClose:3000}
             );
           }
         },
@@ -205,12 +205,12 @@ const Appointments = () => {
 
       // Handle payment failure
       rzp1.on("payment.failed", function (response) {
-        toast.error("Payment failed! " + response.error.description,{autoClose:2000});
+        toast.error("Payment failed! " + response.error.description,{autoClose:3000});
       });
     } catch (error) {
       console.error("Error initiating payment:", error);
       toast.error(
-        error.response?.data?.message || "Could not initiate payment",{autoClose:2000}
+        error.response?.data?.message || "Could not initiate payment",{autoClose:3000}
       );
     }
   };
@@ -360,7 +360,7 @@ const Appointments = () => {
                               const url = appointment.meetingLink;
                               if (!url) {
                                 e.preventDefault();
-                                toast.error("Invalid meeting link",{autoClose:2000});
+                                toast.error("Invalid meeting link",{autoClose:3000});
                                 return;
                               } 
 
@@ -439,16 +439,16 @@ const Appointments = () => {
                               )}
                             </p>
                             <p className="text-sm text-gray-600">
-                              Token Amount (5%): ₹
+                              Token Amount (3%): ₹
                               {formatCurrency(
                                 Math.min(
                                   Number(appointment.propertyId.price || 0) *
-                                    0.05,
+                                    0.03,
                                   500000
                                 )
                               )}
                               {Number(appointment.propertyId.price || 0) *
-                                0.05 >
+                                0.03 >
                                 500000 && (
                                 <span className="text-xs text-orange-600 ml-1">
                                   (capped at ₹5,00,000 for testing)

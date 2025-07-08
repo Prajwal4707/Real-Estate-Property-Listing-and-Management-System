@@ -154,14 +154,14 @@ const Newsletter = () => {
         { email }
       );
       if (response.status === 200) {
-        toast.success("Successfully subscribed to our newsletter!",{autoClose:2000});
+        toast.success("Successfully subscribed to our newsletter!",{autoClose:3000});
         setEmail("");
       } else {
-        toast.error("Failed to subscribe. Please try again.",{autoClose:2000});
+        toast.error("Failed to subscribe. Please try again.",{autoClose:3000});
       }
     } catch (error) {
       console.error("Error subscribing to newsletter:", error);
-      toast.error("Failed to subscribe. Please try again.",{autoClose:2000});
+      toast.error("Failed to subscribe. Please try again.",{autoClose:3000});
     } finally {
       setLoading(false);
     }
