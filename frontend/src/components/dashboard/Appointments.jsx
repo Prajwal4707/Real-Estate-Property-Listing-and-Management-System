@@ -439,21 +439,7 @@ const Appointments = () => {
                               )}
                             </p>
                             <p className="text-sm text-gray-600">
-                              Token Amount (3%): ₹
-                              {formatCurrency(
-                                Math.min(
-                                  Number(appointment.propertyId.price || 0) *
-                                    0.03,
-                                  500000
-                                )
-                              )}
-                              {Number(appointment.propertyId.price || 0) *
-                                0.03 >
-                                500000 && (
-                                <span className="text-xs text-orange-600 ml-1">
-                                  (capped at ₹5,00,000 for testing)
-                                </span>
-                              )}
+                              Token Amount: ₹50,000
                             </p>
                           </div>
                           <button

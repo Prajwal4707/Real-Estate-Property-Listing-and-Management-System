@@ -29,12 +29,10 @@ export const createOrder = async (req, res) => {
         success: false,
         message: "Appointment must be marked as visited before payment",
       });
-    } // Calculate 3% of property price
-    // Convert price to paise and calculate 3%
-    const propertyPrice = appointment.propertyId.price;
-    let tokenAmount = Math.round(propertyPrice * 0.03 * 100); // Convert to paise and calculate 3%
+    } // Set a fixed token amount of ₹1,00,000 (in paise)
+    let tokenAmount = 5000000; // ₹50,000
 
-    // Cap the amount at ₹500,000 (50,000,000 paise) for Razorpay test mode
+    // Cap the amount at ₹500,000 (50,00,000 paise) for Razorpay test mode
     const MAX_TEST_AMOUNT = 50000000; // 5 lakhs in paise
     if (tokenAmount > MAX_TEST_AMOUNT) {
       tokenAmount = MAX_TEST_AMOUNT;
