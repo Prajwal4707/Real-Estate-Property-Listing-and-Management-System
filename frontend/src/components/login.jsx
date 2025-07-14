@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { Loader } from "lucide-react";
+import { Loader, Mail, AlertCircle } from "lucide-react";
 import { Backendurl } from "../App";
 import { authStyles } from "../styles/auth";
 import { toast } from "react-toastify";
@@ -16,6 +16,9 @@ const Login = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [needsVerification, setNeedsVerification] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+  const [resending, setResending] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -40,15 +43,124 @@ const Login = () => {
         toast.success("Login successful!", { autoClose: 2000 });
         navigate("/");
       } else {
-        toast.error(response.data.message);
+        if (response.data.needsVerification) {
+          setNeedsVerification(true);
+          setUserEmail(formData.email);
+          toast.error(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
       }
     } catch (error) {
       console.error("Error logging in:", error);
-      toast.error("An error occurred. Please try again.");
+      if (error.response?.data?.needsVerification) {
+        setNeedsVerification(true);
+        setUserEmail(formData.email);
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An error occurred. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
   };
+
+  const handleResendOTP = async () => {
+    if (!userEmail) return;
+    
+    setResending(true);
+    try {
+      const response = await axios.post(`${Backendurl}/api/users/resend-otp`, { email: userEmail });
+      if (response.data.success) {
+        toast.success('Verification code sent successfully! Check your inbox.');
+        // Redirect to OTP verification page
+        navigate(`/verify-otp?email=${encodeURIComponent(userEmail)}`);
+      } else {
+        toast.error(response.data.message || 'Failed to send verification code');
+      }
+    } catch (error) {
+      console.error('Resend error:', error);
+      toast.error('Failed to send verification code. Please try again.');
+    } finally {
+      setResending(false);
+    }
+  };
+
+  if (needsVerification) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center px-4 py-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          className="w-full max-w-md"
+        >
+          <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-8">
+            {/* Logo & Title */}
+            <div className="text-center mb-8">
+              <Link to="/" className="inline-block">
+                <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                  BuildEstate
+                </h2>
+              </Link>
+            </div>
+
+            {/* Verification Required Content */}
+            <div className="text-center">
+              <AlertCircle className="w-16 h-16 text-orange-500 mx-auto mb-4" />
+              <h2 className="text-2xl font-semibold text-gray-800 mb-2">Email Verification Required</h2>
+              <p className="text-gray-600 mb-6">
+                Your email address <strong className="text-blue-600">{userEmail}</strong> needs to be verified before you can log in.
+              </p>
+              
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6">
+                <h3 className="text-sm font-medium text-orange-800 mb-2">📧 Check Your Email</h3>
+                <ul className="text-sm text-orange-700 space-y-1">
+                  <li>• Look for an email from BuildEstate</li>
+                  <li>• Check your spam folder if you don't see it</li>
+                  <li>• Enter the 6-digit verification code</li>
+                </ul>
+              </div>
+
+              <div className="space-y-3">
+                <button
+                  onClick={handleResendOTP}
+                  disabled={resending}
+                  className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 font-medium disabled:opacity-50"
+                >
+                  {resending ? (
+                    <>
+                      <Loader className="w-5 h-5 animate-spin inline mr-2" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Mail className="w-5 h-5 inline mr-2" />
+                      Send Verification Code
+                    </>
+                  )}
+                </button>
+                
+                <button
+                  onClick={() => setNeedsVerification(false)}
+                  className="w-full border border-gray-300 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-50 transition-all duration-200 font-medium"
+                >
+                  Back to Login
+                </button>
+                
+                <Link
+                  to="/signup"
+                  className="inline-block w-full text-blue-600 py-3 px-6 rounded-lg hover:bg-blue-50 transition-all duration-200 font-medium"
+                >
+                  Create New Account
+                </Link>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center px-4 py-12">

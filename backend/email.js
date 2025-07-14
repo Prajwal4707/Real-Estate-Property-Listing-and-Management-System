@@ -436,3 +436,89 @@ export const getNewPropertyEmailTemplate = (title, location, link) => `
     </div>
   </div>
 `;
+
+export const getOTPVerificationTemplate = (name, otp) => `
+  <div style="max-width: 600px; margin: 20px auto; font-family: 'Arial', sans-serif; line-height: 1.6;">
+    <!-- Header with Background -->
+    <div style="background: linear-gradient(135deg, #2563eb, #1e40af); padding: 40px 20px; border-radius: 15px 15px 0 0; text-align: center;">
+      <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">Verify Your Email</h1>
+      <p style="color: #ffffff; opacity: 0.9; margin: 10px 0 0 0; font-size: 16px;">BuildEstate Account Verification</p>
+    </div>
+
+    <!-- Main Content -->
+    <div style="background: #ffffff; padding: 40px 30px; border-radius: 0 0 15px 15px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
+      <!-- Welcome Message -->
+      <div style="text-align: center; margin-bottom: 30px;">
+        <p style="font-size: 18px; color: #374151; margin: 0;">Hello <strong style="color: #2563eb;">${name}</strong></p>
+        <p style="font-size: 16px; color: #4b5563; margin-top: 10px;">
+          Thank you for creating your BuildEstate account! To complete your registration, please enter the verification code below.
+        </p>
+      </div>
+
+      <!-- OTP Display -->
+      <div style="background: #f0f7ff; border: 2px solid #2563eb; padding: 30px; border-radius: 12px; margin-bottom: 30px; text-align: center;">
+        <h2 style="color: #1e40af; margin: 0 0 15px 0; font-size: 24px;">Your Verification Code</h2>
+        <div style="background: #ffffff; border: 2px dashed #2563eb; padding: 20px; border-radius: 8px; display: inline-block; min-width: 200px;">
+          <span style="font-size: 32px; font-weight: bold; color: #2563eb; letter-spacing: 8px; font-family: 'Courier New', monospace;">${otp}</span>
+        </div>
+        <p style="color: #6b7280; font-size: 14px; margin-top: 15px;">
+          Enter this code on the verification page to complete your registration
+        </p>
+      </div>
+
+      <!-- Verification Info -->
+      <div style="background: #f0f7ff; border-left: 4px solid #2563eb; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+        <h2 style="color: #1e40af; margin: 0 0 15px 0; font-size: 20px;">Why Verify Your Email?</h2>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+          <li style="margin-bottom: 12px; display: flex; align-items: center;">
+            <span style="display: inline-block; width: 24px; height: 24px; background: #dbeafe; border-radius: 50%; margin-right: 12px; text-align: center; line-height: 24px; color: #2563eb;">✓</span>
+            Secure your account and protect your information
+          </li>
+          <li style="margin-bottom: 12px; display: flex; align-items: center;">
+            <span style="display: inline-block; width: 24px; height: 24px; background: #dbeafe; border-radius: 50%; margin-right: 12px; text-align: center; line-height: 24px; color: #2563eb;">✓</span>
+            Access all features including property bookings
+          </li>
+          <li style="margin-bottom: 12px; display: flex; align-items: center;">
+            <span style="display: inline-block; width: 24px; height: 24px; background: #dbeafe; border-radius: 50%; margin-right: 12px; text-align: center; line-height: 24px; color: #2563eb;">✓</span>
+            Receive important updates about your account
+          </li>
+          <li style="display: flex; align-items: center;">
+            <span style="display: inline-block; width: 24px; height: 24px; background: #dbeafe; border-radius: 50%; margin-right: 12px; text-align: center; line-height: 24px; color: #2563eb;">✓</span>
+            Get notified about new properties and deals
+          </li>
+        </ul>
+      </div>
+
+      <!-- Important Note -->
+      <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; border-radius: 8px; margin-top: 30px;">
+        <p style="margin: 0; color: #92400e; font-size: 14px;">
+          <strong>⚠️ Important:</strong> This verification code will expire in 10 minutes for security reasons. If you don't verify your email within this time, you'll need to request a new verification code.
+        </p>
+      </div>
+
+      <!-- Contact Support -->
+      <div style="margin-top: 30px; padding: 20px; background: #f8fafc; border-radius: 8px;">
+        <h3 style="color: #1e40af; margin: 0 0 15px 0; font-size: 18px;">Need Help?</h3>
+        <p style="margin: 0; color: #4b5563;">
+          Our support team is available 24/7 to assist you:
+          <br>
+          📧 <a href="mailto:support@buildestate.com" style="color: #2563eb; text-decoration: none;">support@buildestate.com</a>
+          <br>
+          📞 <a href="tel:+919876543210" style="color: #2563eb; text-decoration: none;">+91 9876543210</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align: center; margin-top: 30px;">
+      <p style="color: #6b7280; font-size: 14px;">
+        © ${new Date().getFullYear()} BuildEstate. All rights reserved.
+      </p>
+      <div style="margin-top: 10px;">
+        <a href="https://real-estate-website-sepia-two.vercel.app" style="color: #2563eb; text-decoration: none; margin: 0 10px;">Website</a>
+        <a href="#" style="color: #2563eb; text-decoration: none; margin: 0 10px;">Privacy Policy</a>
+        <a href="#" style="color: #2563eb; text-decoration: none; margin: 0 10px;">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+`;

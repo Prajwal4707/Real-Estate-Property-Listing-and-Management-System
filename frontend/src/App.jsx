@@ -10,6 +10,7 @@ import Aboutus from "./pages/About";
 import Contact from "./pages/Contact";
 import Login from "./components/login";
 import Signup from "./components/signup";
+import OTPVerification from "./components/OTPVerification";
 import ForgotPassword from "./components/forgetpassword";
 import ResetPassword from "./components/resetpassword";
 import Footer from "./components/footer";
@@ -40,6 +41,7 @@ const App = () => {
           <Routes>
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/verify-otp" element={<OTPVerification />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset/:token" element={<ResetPassword />} />
             <Route path="/" element={<Home />} />

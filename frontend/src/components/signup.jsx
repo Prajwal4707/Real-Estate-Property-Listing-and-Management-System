@@ -35,15 +35,21 @@ const Signup = () => {
         formData
       );
       if (response.data.success) {
-        localStorage.setItem('token', response.data.token);
-        toast.success('Account created successfully!', {autoClose:3000});
-        navigate('/');
+        // Store email for OTP verification
+        localStorage.setItem('pendingVerificationEmail', formData.email);
+        toast.success('Account created successfully! Please check your email for the verification code.', {autoClose:5000});
+        // Redirect to OTP verification page
+        navigate(`/verify-otp?email=${encodeURIComponent(formData.email)}`);
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
       console.error('Error signing up:', error);
-      toast.error('An error occurred. Please try again.');
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error('An error occurred. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

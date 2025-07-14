@@ -8,7 +8,7 @@ import validator from "validator";
 import crypto from "crypto";
 import userModel from "../models/Usermodel.js";
 import transporter from "../config/nodemailer.js";
-import { getWelcomeTemplate } from "../email.js";
+import { getWelcomeTemplate, getOTPVerificationTemplate } from "../email.js";
 import { getPasswordResetTemplate } from "../email.js";
 
 const backendurl = process.env.BACKEND_URL;
@@ -28,6 +28,16 @@ const login = async (req, res) => {
     if (!Registeruser) {
       return res.json({ message: "Email not found", success: false });
     }
+    
+    // Check if email is verified
+    if (!Registeruser.isVerified) {
+      return res.json({ 
+        message: "Please verify your email before logging in. Check your inbox for a verification code.", 
+        success: false,
+        needsVerification: true 
+      });
+    }
+    
     const isMatch = await bcrypt.compare(password, Registeruser.password);
     if (isMatch) {
       const token = createtoken(Registeruser._id);
@@ -51,29 +61,137 @@ const register = async (req, res) => {
     if (!validator.isEmail(email)) {
       return res.json({ message: "Invalid email", success: false });
     }
+    
+    // Check if user already exists
+    const existingUser = await userModel.findOne({ email });
+    if (existingUser) {
+      return res.json({ message: "Email already registered", success: false });
+    }
+    
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new userModel({ name, email, password: hashedPassword });
+    
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpire = Date.now() + 10 * 60 * 1000; // 10 minutes
+    
+    const newUser = new userModel({ 
+      name, 
+      email, 
+      password: hashedPassword,
+      otp,
+      otpExpire,
+      isVerified: false
+    });
     await newUser.save();
-    const token = createtoken(newUser._id);
 
-    // send email
+    // Send OTP email
     const mailOptions = {
       from: `BuildEstate <${process.env.EMAIL}>`,
       to: email,
-      subject: "Welcome to BuildEstate - Your Account Has Been Created",
-      html: getWelcomeTemplate(name),
+      subject: "Verify Your Email - BuildEstate",
+      html: getOTPVerificationTemplate(name, otp),
     };
 
     await transporter.sendMail(mailOptions);
 
     return res.json({
-      token,
-      user: { name: newUser.name, email: newUser.email },
+      message: "Account created successfully! Please check your email for the verification code.",
       success: true,
+      needsVerification: true
     });
   } catch (error) {
     console.error(error);
     return res.json({ message: "Server error", success: false });
+  }
+};
+
+const verifyOTP = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    
+    const user = await userModel.findOne({
+      email,
+      otp,
+      otpExpire: { $gt: Date.now() },
+    });
+    
+    if (!user) {
+      return res.status(400).json({ 
+        message: "Invalid or expired verification code", 
+        success: false 
+      });
+    }
+    
+    // Mark user as verified and clear OTP
+    user.isVerified = true;
+    user.otp = undefined;
+    user.otpExpire = undefined;
+    await user.save();
+    
+    // Send welcome email
+    const mailOptions = {
+      from: `BuildEstate <${process.env.EMAIL}>`,
+      to: user.email,
+      subject: "Welcome to BuildEstate - Your Account Has Been Verified",
+      html: getWelcomeTemplate(user.name),
+    };
+    
+    await transporter.sendMail(mailOptions);
+    
+    return res.json({
+      message: "Email verified successfully! You can now log in to your account.",
+      success: true
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+const resendOTP = async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ 
+        message: "Email not found", 
+        success: false 
+      });
+    }
+    
+    if (user.isVerified) {
+      return res.status(400).json({ 
+        message: "Email is already verified", 
+        success: false 
+      });
+    }
+    
+    // Generate new 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpire = Date.now() + 10 * 60 * 1000; // 10 minutes
+    
+    user.otp = otp;
+    user.otpExpire = otpExpire;
+    await user.save();
+    
+    // Send new OTP email
+    const mailOptions = {
+      from: `BuildEstate <${process.env.EMAIL}>`,
+      to: email,
+      subject: "Verify Your Email - BuildEstate",
+      html: getOTPVerificationTemplate(user.name, otp),
+    };
+    
+    await transporter.sendMail(mailOptions);
+    
+    return res.json({
+      message: "Verification code sent successfully!",
+      success: true
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error", success: false });
   }
 };
 
@@ -220,6 +338,8 @@ const getname = async (req, res) => {
 export {
   login,
   register,
+  verifyOTP,
+  resendOTP,
   forgotpassword,
   resetpassword,
   adminlogin,
