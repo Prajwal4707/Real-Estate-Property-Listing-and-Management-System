@@ -230,7 +230,11 @@ export const updateAppointmentStatus = async (req, res) => {
           to: appointment.userId.email,
           subject: "Viewing Appointment Confirmed - Next Steps",
           html: `
-            <div style="font-family: Arial, sans-serif; padding: 20px;">
+            <div style="background: linear-gradient(135deg, #2563eb, #1e40af); padding: 40px 20px; border-radius: 15px 15px 0 0; text-align: center;">
+             <img src="https://ik.imagekit.io/ddtl85xea/home-regular-24.png?updatedAt=1753077766721" alt="Logo" style="height: 60px; border-radius: 12px; box-shadow: 0 2px 8px rgba(44,62,80,0.12); background: #fff; padding: 8px;">
+             <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">Welcome to BuildEstate!</h1>
+             </div>
+             <div style="background: #ffffff; padding: 40px 30px; border-radius: 0 0 15px 15px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
               <h2>Your Viewing Appointment is Confirmed!</h2>
               <p>Here's what you need to know:</p>
               <ul>

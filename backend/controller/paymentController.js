@@ -117,57 +117,46 @@ export const verifyPayment = async (req, res) => {
         to: appointment.userId.email,
         subject: "Property Token Payment Confirmed - BuildEstate",
         html: `
-          <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-            <div style="text-align: center; animation: fadeIn 1s ease-in;">              <div style="background: #4CAF50; display: inline-block; padding: 15px; border-radius: 50%; margin-bottom: 20px;">
-                <span style="color: white; font-size: 24px; font-weight: bold;">✓</span>
-              </div>
-              <h2 style="color: #2E7D32; margin: 20px 0; font-size: 28px; animation: slideDown 0.5s ease-out;">Payment Successful!</h2>
+          <div style="max-width: 600px; margin: 0 auto; font-family: 'Segoe UI', sans-serif; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+            <!-- Header -->
+            <div style="background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%); padding: 20px; text-align: center;">
+              <img src="https://ik.imagekit.io/ddtl85xea/home-regular-24.png?updatedAt=1753077766721" alt="Logo" style="height: 60px; border-radius: 12px; box-shadow: 0 2px 8px rgba(44,62,80,0.12); background: #fff; padding: 8px;">
+              <h2 style="color: white; margin-top: 10px; font-weight: 600; letter-spacing: 1px;">BuildEstate</h2>
             </div>
-            <div style="background: linear-gradient(145deg, #E8F5E9, #C8E6C9); padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: 20px 0; animation: fadeIn 0.8s ease-in;">
-              <h3 style="color: #1B5E20; margin-bottom: 15px; font-size: 20px;">Payment Details</h3>
-              <div style="background: rgba(255,255,255,0.9); padding: 20px; border-radius: 8px;">
-                <div style="margin: 10px 0; padding: 10px; border-bottom: 1px solid #A5D6A7;">
-                  <strong style="color: #2E7D32;">Property:</strong>
-                  <span style="float: right; color: #333;">${
-                    appointment.propertyId.title
-                  }</span>
-                </div>
-                <div style="margin: 10px 0; padding: 10px; border-bottom: 1px solid #A5D6A7;">
-                  <strong style="color: #2E7D32;">Amount Paid:</strong>
-                  <span style="float: right; color: #333;">₹${(
-                    appointment.payment.amount / 100
-                  ).toFixed(2)}</span>
-                </div>
-                <div style="margin: 10px 0; padding: 10px; border-bottom: 1px solid #A5D6A7;">
-                  <strong style="color: #2E7D32;">Date:</strong>
-                  <span style="float: right; color: #333;">${new Date().toLocaleDateString()}</span>
-                </div>
-                <div style="margin: 10px 0; padding: 10px;">
-                  <strong style="color: #2E7D32;">Payment ID:</strong>
-                  <span style="float: right; color: #333;">${
-                    appointment.payment.paymentId
-                  }</span>
-                </div>
-              </div>
+
+            <!-- Payment Summary -->
+            <div style="padding: 30px; text-align: center;">
+              <h1 style="color: #1b5e20; font-size: 26px; margin-bottom: 10px;">₹${(appointment.payment.amount / 100).toFixed(2)}</h1>
+              <p style="color: #4caf50; font-weight: bold; font-size: 16px; margin: 0;">
+                <span style="display: inline-block; color: green; font-size: 18px;">✔</span>
+                Paid Successfully
+              </p>
             </div>
-            <div style="text-align: center; background: #E8F5E9; padding: 20px; border-radius: 8px; margin-top: 20px; animation: slideUp 0.5s ease-out;">
-              <p style="color: #1B5E20; font-size: 16px; margin: 0;">Our team will contact you soon with next steps</p>
+
+            <!-- Details Table -->
+            <div style="padding: 0 30px 30px 30px;">
+              <hr style="border: none; border-top: 2px solid #eee; margin-bottom: 20px;" />
+              <table style="width: 100%; font-size: 15px; color: #333;">
+              <tr style="height: 40px;">
+                  <td><strong>Property</strong></td>
+                  <td style="text-align: right;">${appointment.propertyId.title || ''}</td>
+                </tr>
+                <tr style="height: 40px;">
+                  <td><strong>Payment Id</strong></td>
+                  <td style="text-align: right;">${appointment.payment.paymentId || ''}</td>
+                </tr>
+                <tr style="height: 40px;">
+                  <td><strong>Paid On</strong></td>
+                  <td style="text-align: right;">${appointment.payment.paidAt ? new Date(appointment.payment.paidAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}</td>
+                </tr>
+              </table>
+            </div>
+
+            <!-- Footer -->
+            <div style="background-color: #f5f5f5; padding: 20px; text-align: center; font-size: 14px; color: #555;">
+              <p style="margin: 0;">Email: <a href="mailto:${appointment.userId.email}" style="color: #1b5e20; text-decoration: none;">${appointment.userId.email}</a></p>
             </div>
           </div>
-          <style>
-            @keyframes fadeIn {
-              from { opacity: 0; }
-              to { opacity: 1; }
-            }
-            @keyframes slideDown {
-              from { transform: translateY(-20px); opacity: 0; }
-              to { transform: translateY(0); opacity: 1; }
-            }
-            @keyframes slideUp {
-              from { transform: translateY(20px); opacity: 0; }
-              to { transform: translateY(0); opacity: 1; }
-            }
-          </style>
         `,
       };
 

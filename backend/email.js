@@ -2,6 +2,7 @@ export const getSchedulingEmailTemplate = (appointment, date, time, notes) => `
   <div style="max-width: 600px; margin: 20px auto; font-family: 'Arial', sans-serif; line-height: 1.6;">
     <!-- Header with Background -->
     <div style="background: linear-gradient(135deg, #2563eb, #1e40af); padding: 40px 20px; border-radius: 15px 15px 0 0; text-align: center;">
+      <img src="https://ik.imagekit.io/ddtl85xea/home-regular-24.png?updatedAt=1753077766721" alt="Logo" style="height: 48px; border-radius: 12px; box-shadow: 0 2px 8px rgba(44,62,80,0.12); background: #fff; padding: 6px; margin-bottom: 10px;">
       <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">Viewing Scheduled</h1>
       <p style="color: #ffffff; opacity: 0.9; margin: 10px 0 0 0; font-size: 16px;">BuildEstate Property Viewing</p>
     </div>
@@ -81,6 +82,7 @@ export const getEmailTemplate = (appointment, status) => `
   <div style="max-width: 600px; margin: 20px auto; font-family: 'Arial', sans-serif; line-height: 1.6;">
     <!-- Header with Background -->
     <div style="background: linear-gradient(135deg, #2563eb, #1e40af); padding: 40px 20px; border-radius: 15px 15px 0 0; text-align: center;">
+      <img src="https://ik.imagekit.io/ddtl85xea/home-regular-24.png?updatedAt=1753077766721" alt="Logo" style="height: 48px; border-radius: 12px; box-shadow: 0 2px 8px rgba(44,62,80,0.12); background: #fff; padding: 6px; margin-bottom: 10px;">
       <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">Appointment ${
         status.charAt(0).toUpperCase() + status.slice(1)
       }</h1>
@@ -189,6 +191,7 @@ export const getNewsletterTemplate = (email) => `
 <div style="max-width: 600px; margin: 20px auto; font-family: 'Arial', sans-serif; line-height: 1.6;">
   <!-- Header with Background -->
   <div style="background: linear-gradient(135deg, #2563eb, #1e40af); padding: 40px 20px; border-radius: 15px 15px 0 0; text-align: center;">
+    <img src="https://ik.imagekit.io/ddtl85xea/home-regular-24.png?updatedAt=1753077766721" alt="Logo" style="height: 48px; border-radius: 12px; box-shadow: 0 2px 8px rgba(44,62,80,0.12); background: #fff; padding: 6px; margin-bottom: 10px;">
     <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">Welcome to BuildEstate!</h1>
     <p style="color: #ffffff; opacity: 0.9; margin: 10px 0 0 0; font-size: 16px;">Your Premier Real Estate Newsletter</p>
   </div>
@@ -271,6 +274,7 @@ export const getWelcomeTemplate = (name) => `
 <div style="max-width: 600px; margin: 20px auto; font-family: 'Arial', sans-serif; line-height: 1.6;">
   <!-- Header with Background -->
   <div style="background: linear-gradient(135deg, #2563eb, #1e40af); padding: 40px 20px; border-radius: 15px 15px 0 0; text-align: center;">
+    <img src="https://ik.imagekit.io/ddtl85xea/home-regular-24.png?updatedAt=1753077766721" alt="Logo" style="height: 48px; border-radius: 12px; box-shadow: 0 2px 8px rgba(44,62,80,0.12); background: #fff; padding: 6px; margin-bottom: 10px;">
     <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">Welcome to BuildEstate!</h1>
     <p style="color: #ffffff; opacity: 0.9; margin: 10px 0 0 0; font-size: 16px;">Your Dream Home Awaits</p>
   </div>
@@ -357,6 +361,7 @@ export const getPasswordResetTemplate = (resetUrl) => `
   <div style="max-width: 600px; margin: 20px auto; font-family: 'Arial', sans-serif; line-height: 1.6;">
     <!-- Header with Background -->
     <div style="background: linear-gradient(135deg, #2563eb, #1e40af); padding: 40px 20px; border-radius: 15px 15px 0 0; text-align: center;">
+      <img src="https://ik.imagekit.io/ddtl85xea/home-regular-24.png?updatedAt=1753077766721" alt="Logo" style="height: 48px; border-radius: 12px; box-shadow: 0 2px 8px rgba(44,62,80,0.12); background: #fff; padding: 6px; margin-bottom: 10px;">
       <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">Reset Your Password</h1>
       <p style="color: #ffffff; opacity: 0.9; margin: 10px 0 0 0; font-size: 16px;">BuildEstate Account Security</p>
     </div>
@@ -424,6 +429,7 @@ export const getPasswordResetTemplate = (resetUrl) => `
 export const getNewPropertyEmailTemplate = (title, location, link) => `
   <div style="max-width:600px;margin:20px auto;font-family:'Arial',sans-serif;line-height:1.6;">
     <div style="background:linear-gradient(135deg,#2563eb,#1e40af);padding:32px 20px;border-radius:15px 15px 0 0;text-align:center;">
+      <img src="https://ik.imagekit.io/ddtl85xea/home-regular-24.png?updatedAt=1753077766721" alt="Logo" style="height: 48px; border-radius: 12px; box-shadow: 0 2px 8px rgba(44,62,80,0.12); background: #fff; padding: 6px; margin-bottom: 10px;">
       <h1 style="color:#fff;margin:0;font-size:26px;font-weight:700;">New Property Listed!</h1>
     </div>
     <div style="background:#fff;padding:32px 24px;border-radius:0 0 15px 15px;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
@@ -441,6 +447,7 @@ export const getOTPVerificationTemplate = (name, otp) => `
   <div style="max-width: 600px; margin: 20px auto; font-family: 'Arial', sans-serif; line-height: 1.6;">
     <!-- Header with Background -->
     <div style="background: linear-gradient(135deg, #2563eb, #1e40af); padding: 40px 20px; border-radius: 15px 15px 0 0; text-align: center;">
+      <img src="https://ik.imagekit.io/ddtl85xea/home-regular-24.png?updatedAt=1753077766721" alt="Logo" style="height: 48px; border-radius: 12px; box-shadow: 0 2px 8px rgba(44,62,80,0.12); background: #fff; padding: 6px; margin-bottom: 10px;">
       <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">Verify Your Email</h1>
       <p style="color: #ffffff; opacity: 0.9; margin: 10px 0 0 0; font-size: 16px;">BuildEstate Account Verification</p>
     </div>
