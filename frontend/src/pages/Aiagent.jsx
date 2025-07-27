@@ -32,12 +32,8 @@ const AIPropertyHub = () => {
 
   // Timer for loading state
   useEffect(() => {
-    // Check if we're running in a deployed environment (not localhost)
-    const isDeployed =
-      window.location.hostname !== "localhost" &&
-      !window.location.hostname.startsWith("192.168") &&
-      !window.location.hostname.startsWith("127.0.0.1");
-    setIsDeployedVersion(isDeployed);
+    // Always set to false to enable AI features in all environments
+    setIsDeployedVersion(false);
 
     document.title =
       "AI Property Hub | BuildEstate - Real Estate Market Analysis";
@@ -68,12 +64,7 @@ const AIPropertyHub = () => {
   }, [isLoading, searchPerformed]);
 
   const handleSearch = async (searchParams) => {
-    if (isDeployedVersion) {
-      setSearchError(
-        "AI features are only available in the local development environment. Please download the repository to use this feature."
-      );
-      return;
-    }
+    // Remove the deployment check to allow AI features in all environments
 
     setIsLoading(true);
     setSearchError("");
@@ -226,11 +217,11 @@ const AIPropertyHub = () => {
                   </div>
                   <div className="text-center">
                     <h3 className="text-lg font-semibold mb-2">
-                      AI Features Limited Online
+                      AI Features Available
                     </h3>
                     <p className="text-gray-600 mb-4">
-                      Due to API limitations, AI property features are only
-                      available in local development environment.
+                      Our AI-powered property analysis features are now available.
+                      Get detailed insights for your property search.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
                       <a
@@ -335,15 +326,7 @@ const AIPropertyHub = () => {
                   better property decisions
                 </p>
 
-                {isDeployedVersion && (
-                  <div className="mt-4 p-4 bg-amber-50 border border-amber-100 rounded-lg text-sm text-amber-800">
-                    <p>
-                      <strong>Note:</strong> AI features are currently only
-                      available in the local development environment due to API
-                      key restrictions.
-                    </p>
-                  </div>
-                )}
+                {/* Removed the deployment restriction notice */}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mt-6 sm:mt-8">
