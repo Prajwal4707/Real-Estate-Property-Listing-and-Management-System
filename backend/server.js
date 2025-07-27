@@ -122,7 +122,7 @@ app.use((err, req, res, next) => {
     success: false,
     message: err.message || "Internal server error",
     statusCode,
-    ...(process.env.NODE_ENV === "production" && { stack: err.stack }),
+    ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
     timestamp: new Date().toISOString(),
   });
 });
