@@ -64,25 +64,22 @@ const AIPropertyHub = () => {
   }, [isLoading, searchPerformed]);
 
   const handleSearch = async (searchParams) => {
-    // Remove the deployment check to allow AI features in all environments
-
     setIsLoading(true);
     setSearchError("");
     setSearchPerformed(true);
     setLoadingTime(0);
 
     try {
-      // Fetch property data
+      // Fetch both property data and location trends in parallel
       setLoadingStage("properties");
-      const propertyResponse = await searchProperties(searchParams);
-      console.log("Property Response:", propertyResponse); // Debug log
+      const [propertyResponse, locationResponse] = await Promise.all([
+        searchProperties(searchParams),
+        getLocationTrends(searchParams.city)
+      ]);
+
+      // Update states with the responses
       setProperties(propertyResponse.properties || []);
       setPropertyAnalysis(propertyResponse.analysis || "");
-
-      // Fetch location trends for the same city
-      setLoadingStage("locations");
-      const locationResponse = await getLocationTrends(searchParams.city);
-      console.log("Location Response:", locationResponse); // Debug log
       setLocations(locationResponse.locations || []);
       setLocationAnalysis(locationResponse.analysis || "");
     } catch (error) {
@@ -96,20 +93,20 @@ const AIPropertyHub = () => {
   // Enhanced loading indicator component
   const renderLoadingIndicator = () => {
     const getLoadingMessage = () => {
-      if (loadingTime < 5) {
-        return "Extracting property data from various sources...";
-      } else if (loadingTime < 15) {
-        return "Loading AI model for comprehensive analysis...";
-      } else if (loadingTime < 30) {
-        return "AI is analyzing property details and market conditions...";
+      if (loadingTime < 3) {
+        return "Extracting property data...";
+      } else if (loadingTime < 8) {
+        return "Running AI analysis...";
+      } else if (loadingTime < 12) {
+        return "Generating market insights...";
       } else {
-        return "Finalizing results and generating insights for you...";
+        return "Finalizing results...";
       }
     };
 
     const getProgressWidth = () => {
-      // Calculate progress percentage (max 95% so it doesn't look complete)
-      const progress = Math.min(95, (loadingTime / 45) * 100);
+      // Calculate progress percentage (max 95% with faster progression)
+      const progress = Math.min(95, (loadingTime / 15) * 100);
       return `${progress}%`;
     };
 
