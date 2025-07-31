@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import { Backendurl } from "../App";
 import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ChatIcon from "../components/ai/ChatIcon";
@@ -25,11 +26,19 @@ const FloatingChatbot = () => {
     setInput("");
     setLoading(true);
     try {
-      const res = await axios.post("/api/chat", {
+      // Use the API_URL from the environment
+      const API_URL = import.meta.env.VITE_API_BASE_URL;
+      console.log('Making chat request to:', `${API_URL}/api/chat`);
+      
+      const res = await axios.post(`${API_URL}/api/chat`, {
         messages: [
           { role: "system", content: "You are a helpful real estate assistant." },
           ...newMessages
         ]
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
       setMessages([...newMessages, { role: "assistant", content: res.data.reply }]);
     } catch (err) {

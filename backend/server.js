@@ -94,16 +94,17 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(trackAPIStats);
 
-// Mount routes
-app.use("/api/property", propertyRoutes);
+// API Routes
+app.use("/api/products", propertyrouter);
 app.use("/api/users", userrouter);
-app.use("/api/form", formrouter);
+app.use("/api/forms", formrouter);
 app.use("/api/news", newsrouter);
 app.use("/api/appointments", appointmentRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/property", propertyRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/bookings", bookingRoutes);
-app.use("/api/chat", chatRoute);  // Mount chat route
+app.use("/api/chat", chatRoute);
 app.use("/api/visitors", visitorRoute);
 app.use("/api/testimonials", testimonialRoute);
 
@@ -115,20 +116,6 @@ connectdb()
   .catch((err) => {
     console.error("Database connection error:", err);
   });
-
-// API Routes
-app.use("/api/products", propertyrouter);
-app.use("/api/users", userrouter);
-app.use("/api/forms", formrouter);
-app.use("/api/news", newsrouter);
-app.use("/api/appointments", appointmentRouter);
-app.use("/api/admin", adminRouter);
-app.use("/api/property", propertyRoutes);
-app.use("/api/appointments/payment", paymentRoutes);
-app.use("/api/bookings", bookingRoutes);
-app.use("/api/chat", chatRoute);
-app.use("/api/visitors", visitorRoute);
-app.use("/api/testimonials", testimonialRoute);
 
 app.use((err, req, res, next) => {
   console.error("Error:", err);
