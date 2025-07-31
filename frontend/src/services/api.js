@@ -13,17 +13,10 @@ const api = axios.create({
 
 export const searchProperties = async (searchParams) => {
   try {
-    console.log('Making API request to:', `${API_URL}/api/property/properties/search`);
     const response = await api.post('/api/property/properties/search', searchParams);
     return response.data;
   } catch (error) {
     console.error('Error searching properties:', error);
-    console.error('Error details:', {
-      message: error.message,
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-      data: error.response?.data
-    });
     throw error;
   }
 };
@@ -34,23 +27,6 @@ export const getLocationTrends = async (city) => {
     return response.data;
   } catch (error) {
     console.error('Error fetching location trends:', error);
-    throw error;
-  }
-};
-
-export const sendChatMessage = async (messages) => {
-  try {
-    console.log('Making chat API request to:', `${API_URL}/api/chat`);
-    const response = await api.post('/api/chat', { messages });
-    return response.data;
-  } catch (error) {
-    console.error('Error sending chat message:', error);
-    console.error('Error details:', {
-      message: error.message,
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-      data: error.response?.data
-    });
     throw error;
   }
 };
