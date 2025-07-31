@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
+import axios from "axios";
 import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ChatIcon from "../components/ai/ChatIcon";
-import api from "../services/api";
 
 const FloatingChatbot = () => {
   const [open, setOpen] = useState(false);
@@ -25,8 +25,7 @@ const FloatingChatbot = () => {
     setInput("");
     setLoading(true);
     try {
-      console.log('Sending chat message to API...');
-      const res = await api.post('/api/chat', {
+      const res = await axios.post("/api/chat", {
         messages: [
           { role: "system", content: "You are a helpful real estate assistant." },
           ...newMessages

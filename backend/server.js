@@ -28,8 +28,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://buildestate-frontend.vercel.app",
   "https://buildestate-admin18.vercel.app",
-  "https://real-estate-management-xhqz.onrender.com",
-  "https://real-estate-property-listing-and-management-system.vercel.app"
+  "https://real-estate-management-xhqz.onrender.com"
 ];
 
 // CORS Middleware FIRST
@@ -43,8 +42,10 @@ app.use(
       }
     },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+    preflightContinue: false,
+    optionsSuccessStatus: 204
   })
 );
 
@@ -92,6 +93,19 @@ app.use(compression());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(trackAPIStats);
+
+// Mount routes
+app.use("/api/property", propertyRoutes);
+app.use("/api/users", userrouter);
+app.use("/api/form", formrouter);
+app.use("/api/news", newsrouter);
+app.use("/api/appointments", appointmentRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/payments", paymentRoutes);
+app.use("/api/bookings", bookingRoutes);
+app.use("/api/chat", chatRoute);  // Mount chat route
+app.use("/api/visitors", visitorRoute);
+app.use("/api/testimonials", testimonialRoute);
 
 // Database connection
 connectdb()

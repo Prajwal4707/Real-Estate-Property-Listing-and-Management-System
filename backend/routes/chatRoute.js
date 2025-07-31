@@ -5,32 +5,20 @@ import Property from "../models/propertymodel.js";
 const router = express.Router();
 dotenv.config({ path: './.env' });
 
+// Handle OPTIONS requests explicitly
+router.options("/", (req, res) => {
+  res.header('Allow', 'POST, OPTIONS');
+  res.status(204).end();
+});
+
 router.post("/", async (req, res) => {
+  const { messages } = req.body; // [{role: "user", content: "..."}]
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  const endpoint = "https://openrouter.ai/api/v1/chat/completions";
+
+  // Fetch a few properties from the database
+  let propertySummary = "";
   try {
-    console.log("Chat request received:", req.body);
-    
-    const { messages } = req.body;
-    if (!messages || !Array.isArray(messages)) {
-      return res.status(400).json({
-        error: "Invalid request format",
-        details: "Messages array is required"
-      });
-    }
-
-    const apiKey = process.env.OPENROUTER_API_KEY;
-    if (!apiKey) {
-      console.error("OpenRouter API key is missing");
-      return res.status(500).json({
-        error: "Configuration error",
-        details: "API key is not configured"
-      });
-    }
-
-    console.log("Using OpenRouter API key:", apiKey.substring(0, 5) + "...");
-    const endpoint = "https://api.openrouter.ai/api/v1/chat/completions";
-
-    // Fetch a few properties from the database
-    let propertySummary = "";
     // Limit to first 50 properties to avoid overwhelming responses
     const properties = await Property.find({ isBlocked: false }).limit(50);
     console.log(`Found ${properties.length} properties in database`);
@@ -46,6 +34,10 @@ router.post("/", async (req, res) => {
     } else {
       propertySummary = "No properties are currently listed.";
     }
+  } catch (err) {
+    console.error("Error fetching properties:", err);
+    propertySummary = "(Could not load property data.)";
+  }
 
   // Build the system prompt
   const systemPrompt = `You are BuildBot, a helpful real estate assistant for BuildEstate.
@@ -72,45 +64,39 @@ If the user asks about properties in a specific location, list them using the se
     ...messages
   ];
 
-    console.log("Sending request to OpenRouter with messages:", aiMessages);
-    
+  try {
     const response = await fetch(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${apiKey}`,
-        "HTTP-Referer": "https://buildestate-frontend.vercel.app",
-        "X-Title": "BuildEstate Chat"
       },
       body: JSON.stringify({
-        model: "anthropic/claude-2",
+        model: "openai/gpt-4.1", // or another model available on OpenRouter
         messages: aiMessages,
-        max_tokens: 500,
-        temperature: 0.7
+        max_tokens: 350,
+        temperature: 0.7,
       }),
     });
 
     const data = await response.json();
-    console.log("OpenRouter API response status:", response.status);
-    console.log("OpenRouter API response:", data);
-
-    if (!response.ok) {
-      console.error("OpenRouter API error:", data);
-      throw new Error(data.error?.message || "API request failed");
-    }
+    console.log("OpenRouter API response:", data); // Log the full response
 
     if (!data.choices || !data.choices[0]) {
-      console.error("Invalid response format:", data);
-      throw new Error("Invalid API response format");
+      return res.status(500).json({ error: "No response from AI", details: data });
     }
     
     let reply = data.choices[0].message.content;
-    console.log("AI response:", reply);
+    
+    console.log("Original AI response:", reply);
     
     // Post-process the response to ensure proper sequential numbering
+    // Look for any numbered property references and convert them to sequential numbering
     const lines = reply.split('\n');
     let propertyCount = 0;
     const processedLines = lines.map(line => {
+      // Check if line starts with a number followed by a period (any number)
+      // Also handle variations like "1)" or "1 -" or "1:"
       const match = line.match(/^(\d+)[\.\)\-\:]\s*(.*)/);
       if (match) {
         propertyCount++;
@@ -120,6 +106,7 @@ If the user asks about properties in a specific location, list them using the se
       return line;
     });
     
+    // If we found any numbered properties, use the processed version
     if (propertyCount > 0) {
       reply = processedLines.join('\n');
       console.log("Processed response with sequential numbering:", reply);
@@ -127,18 +114,8 @@ If the user asks about properties in a specific location, list them using the se
     
     res.json({ reply });
   } catch (error) {
-    console.error("Chat route error:", {
-      message: error.message,
-      stack: error.stack,
-      type: error.name
-    });
-    
-    res.status(500).json({
-      error: "Chat processing failed",
-      details: error.message,
-      type: error.name,
-      timestamp: new Date().toISOString()
-    });
+    console.error("OpenRouter API error:", error); // Log the error
+    res.status(500).json({ error: error.message });
   }
 });
 
