@@ -29,9 +29,8 @@ router.post("/", async (req, res) => {
     console.log("Using OpenRouter API key:", apiKey.substring(0, 5) + "...");
     const endpoint = "https://api.openrouter.ai/api/v1/chat/completions";
 
-  // Fetch a few properties from the database
-  let propertySummary = "";
-  try {
+    // Fetch a few properties from the database
+    let propertySummary = "";
     // Limit to first 50 properties to avoid overwhelming responses
     const properties = await Property.find({ isBlocked: false }).limit(50);
     console.log(`Found ${properties.length} properties in database`);
@@ -47,10 +46,6 @@ router.post("/", async (req, res) => {
     } else {
       propertySummary = "No properties are currently listed.";
     }
-  } catch (err) {
-    console.error("Error fetching properties:", err);
-    propertySummary = "(Could not load property data.)";
-  }
 
   // Build the system prompt
   const systemPrompt = `You are BuildBot, a helpful real estate assistant for BuildEstate.
@@ -77,7 +72,6 @@ If the user asks about properties in a specific location, list them using the se
     ...messages
   ];
 
-  try {
     console.log("Sending request to OpenRouter with messages:", aiMessages);
     
     const response = await fetch(endpoint, {
@@ -89,14 +83,10 @@ If the user asks about properties in a specific location, list them using the se
         "X-Title": "BuildEstate Chat"
       },
       body: JSON.stringify({
-        model: "anthropic/claude-2", // Using a more reliable model
+        model: "anthropic/claude-2",
         messages: aiMessages,
         max_tokens: 500,
-        temperature: 0.7,
-        headers: {
-          "HTTP-Referer": "https://buildestate-frontend.vercel.app",
-          "X-Title": "BuildEstate Chat"
-        }
+        temperature: 0.7
       }),
     });
 
@@ -106,32 +96,21 @@ If the user asks about properties in a specific location, list them using the se
 
     if (!response.ok) {
       console.error("OpenRouter API error:", data);
-      return res.status(response.status).json({
-        error: "AI Service Error",
-        details: data.error?.message || "Unknown error occurred",
-        status: response.status
-      });
+      throw new Error(data.error?.message || "API request failed");
     }
 
     if (!data.choices || !data.choices[0]) {
       console.error("Invalid response format:", data);
-      return res.status(500).json({
-        error: "Invalid AI Response",
-        details: "No choices in response",
-        data: data
-      });
+      throw new Error("Invalid API response format");
     }
     
     let reply = data.choices[0].message.content;
     console.log("AI response:", reply);
     
     // Post-process the response to ensure proper sequential numbering
-    // Look for any numbered property references and convert them to sequential numbering
     const lines = reply.split('\n');
     let propertyCount = 0;
     const processedLines = lines.map(line => {
-      // Check if line starts with a number followed by a period (any number)
-      // Also handle variations like "1)" or "1 -" or "1:"
       const match = line.match(/^(\d+)[\.\)\-\:]\s*(.*)/);
       if (match) {
         propertyCount++;
@@ -141,7 +120,6 @@ If the user asks about properties in a specific location, list them using the se
       return line;
     });
     
-    // If we found any numbered properties, use the processed version
     if (propertyCount > 0) {
       reply = processedLines.join('\n');
       console.log("Processed response with sequential numbering:", reply);
@@ -152,10 +130,9 @@ If the user asks about properties in a specific location, list them using the se
     console.error("Chat route error:", {
       message: error.message,
       stack: error.stack,
-      response: error.response?.data
+      type: error.name
     });
     
-    // Send a more detailed error response
     res.status(500).json({
       error: "Chat processing failed",
       details: error.message,
