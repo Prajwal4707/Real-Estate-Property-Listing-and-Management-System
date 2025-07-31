@@ -5,6 +5,12 @@ import Property from "../models/propertymodel.js";
 const router = express.Router();
 dotenv.config({ path: './.env' });
 
+// Handle OPTIONS requests explicitly
+router.options("/", (req, res) => {
+  res.header('Allow', 'POST, OPTIONS');
+  res.status(204).end();
+});
+
 router.post("/", async (req, res) => {
   const { messages } = req.body; // [{role: "user", content: "..."}]
   const apiKey = process.env.OPENROUTER_API_KEY;

@@ -13,10 +13,17 @@ const api = axios.create({
 
 export const searchProperties = async (searchParams) => {
   try {
+    console.log('Making API request to:', `${API_URL}/api/property/properties/search`);
     const response = await api.post('/api/property/properties/search', searchParams);
     return response.data;
   } catch (error) {
     console.error('Error searching properties:', error);
+    console.error('Error details:', {
+      message: error.message,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data
+    });
     throw error;
   }
 };
