@@ -28,7 +28,8 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://buildestate-frontend.vercel.app",
   "https://buildestate-admin18.vercel.app",
-  "https://real-estate-management-xhqz.onrender.com"
+  "https://real-estate-management-xhqz.onrender.com",
+  "https://real-estate-property-listing-and-management-system.vercel.app"
 ];
 
 // CORS Middleware FIRST
