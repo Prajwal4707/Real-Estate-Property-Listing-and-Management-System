@@ -38,4 +38,21 @@ export const getLocationTrends = async (city) => {
   }
 };
 
+export const sendChatMessage = async (messages) => {
+  try {
+    console.log('Making chat API request to:', `${API_URL}/api/chat`);
+    const response = await api.post('/api/chat', { messages });
+    return response.data;
+  } catch (error) {
+    console.error('Error sending chat message:', error);
+    console.error('Error details:', {
+      message: error.message,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data
+    });
+    throw error;
+  }
+};
+
 export default api;
