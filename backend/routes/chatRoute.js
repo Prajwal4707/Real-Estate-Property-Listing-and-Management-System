@@ -6,9 +6,28 @@ const router = express.Router();
 dotenv.config({ path: './.env' });
 
 router.post("/", async (req, res) => {
-  const { messages } = req.body; // [{role: "user", content: "..."}]
-  const apiKey = process.env.OPENROUTER_API_KEY;
-  const endpoint = "https://openrouter.ai/api/v1/chat/completions";
+  try {
+    console.log("Chat request received:", req.body);
+    
+    const { messages } = req.body;
+    if (!messages || !Array.isArray(messages)) {
+      return res.status(400).json({
+        error: "Invalid request format",
+        details: "Messages array is required"
+      });
+    }
+
+    const apiKey = process.env.OPENROUTER_API_KEY;
+    if (!apiKey) {
+      console.error("OpenRouter API key is missing");
+      return res.status(500).json({
+        error: "Configuration error",
+        details: "API key is not configured"
+      });
+    }
+
+    console.log("Using OpenRouter API key:", apiKey.substring(0, 5) + "...");
+    const endpoint = "https://api.openrouter.ai/api/v1/chat/completions";
 
   // Fetch a few properties from the database
   let propertySummary = "";
@@ -59,30 +78,52 @@ If the user asks about properties in a specific location, list them using the se
   ];
 
   try {
+    console.log("Sending request to OpenRouter with messages:", aiMessages);
+    
     const response = await fetch(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${apiKey}`,
+        "HTTP-Referer": "https://buildestate-frontend.vercel.app",
+        "X-Title": "BuildEstate Chat"
       },
       body: JSON.stringify({
-        model: "openai/gpt-4.1", // or another model available on OpenRouter
+        model: "anthropic/claude-2", // Using a more reliable model
         messages: aiMessages,
-        max_tokens: 350,
+        max_tokens: 500,
         temperature: 0.7,
+        headers: {
+          "HTTP-Referer": "https://buildestate-frontend.vercel.app",
+          "X-Title": "BuildEstate Chat"
+        }
       }),
     });
 
     const data = await response.json();
-    console.log("OpenRouter API response:", data); // Log the full response
+    console.log("OpenRouter API response status:", response.status);
+    console.log("OpenRouter API response:", data);
+
+    if (!response.ok) {
+      console.error("OpenRouter API error:", data);
+      return res.status(response.status).json({
+        error: "AI Service Error",
+        details: data.error?.message || "Unknown error occurred",
+        status: response.status
+      });
+    }
 
     if (!data.choices || !data.choices[0]) {
-      return res.status(500).json({ error: "No response from AI", details: data });
+      console.error("Invalid response format:", data);
+      return res.status(500).json({
+        error: "Invalid AI Response",
+        details: "No choices in response",
+        data: data
+      });
     }
     
     let reply = data.choices[0].message.content;
-    
-    console.log("Original AI response:", reply);
+    console.log("AI response:", reply);
     
     // Post-process the response to ensure proper sequential numbering
     // Look for any numbered property references and convert them to sequential numbering
@@ -108,8 +149,19 @@ If the user asks about properties in a specific location, list them using the se
     
     res.json({ reply });
   } catch (error) {
-    console.error("OpenRouter API error:", error); // Log the error
-    res.status(500).json({ error: error.message });
+    console.error("Chat route error:", {
+      message: error.message,
+      stack: error.stack,
+      response: error.response?.data
+    });
+    
+    // Send a more detailed error response
+    res.status(500).json({
+      error: "Chat processing failed",
+      details: error.message,
+      type: error.name,
+      timestamp: new Date().toISOString()
+    });
   }
 });
 
