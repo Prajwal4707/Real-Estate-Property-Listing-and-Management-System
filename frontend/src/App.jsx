@@ -28,9 +28,6 @@ import FloatingChatbot from "./pages/Chatbot";
 export const Backendurl = import.meta.env.VITE_API_BASE_URL;
 
 const App = () => {
-  // Check if we're running in localhost
-  const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-
   return (
     <HelmetProvider>
       <AuthProvider>
@@ -40,7 +37,7 @@ const App = () => {
           <StructuredData type="organization" />
 
           <Navbar />
-          {isLocalhost && <FloatingChatbot />}
+          <FloatingChatbot />
           <Routes>
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
